@@ -12,7 +12,7 @@ import NotFound from "./components/NotFound.jsx";
 function App() {
     return (
         <>
-            <BrowserRouter>
+            <BrowserRouter> 
                 <DynamicTitle />
                 <Routes>
                     <Route path="/" element={<Home />}></Route>
