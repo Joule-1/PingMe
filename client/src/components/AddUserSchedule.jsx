@@ -1,15 +1,15 @@
 import React from "react";
 import { CloseIcon } from "../assets";
 
-const AddSchedule = () => {
+const AddUserSchedule = ({setdisplayAddSchedule}) => {
     return (
-        <section className="absolute top-4 mx-[25%] w-[50%] rounded-2xl bg-gray-200 p-5 shadow-xl">
+        <section className={`absolute top-4 mx-[25%] w-[50%] rounded-2xl bg-gray-200 p-5 shadow-xl`}>
             <div className="flex place-content-between items-center">
                 <span className="poppins-semibold text-xl">
                     Initiate Task
                     <hr className="w-[50%] rounded-full border-2 border-[#4b82ff]" />
                 </span>
-                <span>
+                <span onClick={() => (setdisplayAddSchedule("hidden"))}>
                     <img
                         src={CloseIcon}
                         className="cursor-pointer rounded-full bg-white p-1"
@@ -51,7 +51,7 @@ const AddSchedule = () => {
                             <input
                                 type="radio"
                                 id="moderate"
-                                checked
+                                defaultChecked 
                                 name="priority"
                             />
                         </span>
@@ -80,4 +80,4 @@ const AddSchedule = () => {
     );
 };
 
-export default AddSchedule;
+export default AddUserSchedule;

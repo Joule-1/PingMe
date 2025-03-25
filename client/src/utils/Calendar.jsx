@@ -8,7 +8,7 @@ import {
     RefreshIcon,
 } from "../assets";
 import getCurrentTime from "./GetCurrentTime.js";
-import AddSchedule from "../components/AddSchedule.jsx";
+import AddUserSchedule from "../components/AddUserSchedule.jsx";
 
 const Calendar = () => {
     const weekDay = {
@@ -120,7 +120,7 @@ const Calendar = () => {
     const [currentYear, setCurrentYear] = useState("Year");
     const [currentDayOfWeek, setCurrentDayOfWeek] = useState("Monday");
     const [loading, setLoading] = useState(true);
-    const [displayAddSchedule, setdisplayAddSchedule] = useState(true);
+    const [displayAddSchedule, setdisplayAddSchedule] = useState("hidden");
 
     useEffect(() => {
         const fetchTime = async () => {
@@ -176,8 +176,8 @@ const Calendar = () => {
 
     return (
         <section>
-            <div className={`${displayAddSchedule ? "block" : "hidden"}`}>
-                <AddSchedule />
+            <div className={`${displayAddSchedule}`}>
+                <AddUserSchedule setdisplayAddSchedule={setdisplayAddSchedule} />
             </div>
             <div className="h-[50vh]">
                 <div>
@@ -220,7 +220,7 @@ const Calendar = () => {
                     <div className="poppins-semibold mt-3 grid grid-cols-11 px-4 text-center">
                         <span
                             className="flex items-center justify-center rounded-tl-2xl border-1 border-gray-200"
-                            onClick={() => setdisplayAddSchedule(true)}
+                            onClick={() => setdisplayAddSchedule((displayAddSchedule==="hidden") ? "block" : "")}
                         >
                             <img
                                 src={AddIcon}
