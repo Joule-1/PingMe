@@ -19,6 +19,7 @@ const ScheduleManipulationSlice = createSlice({
                 description: action.payload.description,
             }
             state.userSchedules.push(userSchedule)
+            //backend push
         },
     }
 });

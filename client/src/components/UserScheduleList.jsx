@@ -5,9 +5,7 @@ const UserScheduleList = () => {
     const userSchedules = useSelector((state) => state.userSchedules);
 
     return (
- 
-        <div>
-            {console.log(userSchedules)}
+        <section>
             <h2>User Schedules</h2>
             <ul>
                 {userSchedules.map((schedule) => (
@@ -20,7 +18,7 @@ const UserScheduleList = () => {
                     </li>
                 ))}
             </ul>
-        </div>
+        </section>
     );
 };
 

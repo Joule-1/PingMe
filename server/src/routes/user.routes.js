@@ -11,6 +11,10 @@ import {
 import secureTime from "../controllers/secureTime.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import verifyJWT from "../middlewares/auth.middleware.js";
+import {
+    addUserSchedule,
+    getUserSchedule,
+} from "../controllers/userSchedule.controller.js";
 
 const router = Router();
 
@@ -22,6 +26,8 @@ router.route("/login").post(loginUser);
 router.route("/secure-time").get(secureTime);
 
 // Secure Routes
+router.route("/add-user-schedule").post(verifyJWT, addUserSchedule);
+router.route("/get-user-schedule").get(verifyJWT, getUserSchedule);
 router.route("/authenticate-user").post(verifyJWT, authenticateUser);
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/refresh-token").post(refreshAccessToken);
