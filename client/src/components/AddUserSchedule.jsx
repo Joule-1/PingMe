@@ -5,10 +5,11 @@ import { CloseIcon } from "../assets";
 
 const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
     const [formData, setFormData] = useState({
+        userid: userid,
         title: "",
         date: "",
         time: "",
-        priority: "Moderate",  // Default selection
+        priority: "Moderate", // Default selection
         description: "",
     });
 
@@ -26,26 +27,41 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
         event.preventDefault();
 
         const newSchedule = {
-            id: userid, // Assign user ID from backend
             ...formData,
         };
 
         dispatch(addSchedule(newSchedule));
+
+        setFormData({
+            userid: "",
+            title: "",
+            date: "",
+            time: "",
+            priority: "Moderate",
+            description: "",
+        });
+
         setdisplayAddSchedule("hidden");
     };
 
     return (
         <section className="absolute top-4 mx-[25%] w-[50%] rounded-2xl bg-gray-200 p-5 shadow-xl">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
                 <span className="poppins-semibold text-xl">
                     Initiate Task
                     <hr className="w-[50%] rounded-full border-2 border-[#4b82ff]" />
                 </span>
                 <span onClick={() => setdisplayAddSchedule("hidden")}>
-                    <img src={CloseIcon} className="cursor-pointer rounded-full bg-white p-1" />
+                    <img
+                        src={CloseIcon}
+                        className="cursor-pointer rounded-full bg-white p-1"
+                    />
                 </span>
             </div>
-            <form onSubmit={handleSubmit} className="mt-5 flex flex-col text-sm">
+            <form
+                onSubmit={handleSubmit}
+                className="mt-5 flex flex-col text-sm"
+            >
                 <div className="rounded-2xl bg-white pl-5">
                     <input
                         type="text"
@@ -75,7 +91,10 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
                         <span className="mb-1">Priority</span>
                         <span className="flex w-[70%] justify-between">
                             {["Extreme", "Moderate", "Low"].map((level) => (
-                                <label key={level} className="flex items-center">
+                                <label
+                                    key={level}
+                                    className="flex items-center"
+                                >
                                     <input
                                         type="radio"
                                         name="priority"
