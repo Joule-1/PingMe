@@ -10,7 +10,8 @@ import {
 import getCurrentTime from "./GetCurrentTime.js";
 import AddUserSchedule from "../components/AddUserSchedule.jsx";
 
-const Calendar = () => {
+const Calendar = ({userid}) => {
+    // console.log(userid)
     const weekDay = {
         Sunday: {
             shortName: "Sun",
@@ -177,7 +178,7 @@ const Calendar = () => {
     return (
         <section>
             <div className={`${displayAddSchedule}`}>
-                <AddUserSchedule setdisplayAddSchedule={setdisplayAddSchedule} />
+                <AddUserSchedule setdisplayAddSchedule={setdisplayAddSchedule} userid={userid} />
             </div>
             <div className="h-[50vh]">
                 <div>

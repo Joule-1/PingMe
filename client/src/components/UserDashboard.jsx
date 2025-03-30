@@ -4,6 +4,7 @@ import api from "../utils/Axios";
 import NotFound from "./NotFound";
 import UserNavbar from "./UserNavbar";
 import Calendar from "../utils/Calendar";
+import UserScheduleList from "./UserScheduleList";
 
 const UserDashboard = () => {
     const { userid } = useParams();
@@ -25,6 +26,7 @@ const UserDashboard = () => {
             );
 
             if (res.data.success == true) {
+                
                 setUser_Name(res.data.data.fullname);
                 setNotFound(false);
             } else {
@@ -44,10 +46,12 @@ const UserDashboard = () => {
                 <div className="border bg-white">
                     <div></div>
                     <div className="border">
-                        <Calendar />
+                        <Calendar userid={userid} />
                     </div>
                 </div>
-                <div className="border bg-white"></div>
+                <div className="border bg-white">
+                    <UserScheduleList />
+                </div>
             </div>
         </section>
     );

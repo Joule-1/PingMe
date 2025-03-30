@@ -8,17 +8,20 @@ const ScheduleManipulationSlice = createSlice({
     name: "userSchedule",
     initialState,
     reducers: {
-        addTodo: (state, action) => {
+        addSchedule : (state, action) => {
             const userSchedule = {
-                id: nanoid(), 
-                text: action.payload
+                title: action.payload.title,
+                date: action.payload.date,
+                time: action.payload.time,
+                priority: action.payload.priority,
+                description: action.payload.description,
             }
             state.userSchedules.push(userSchedule)
         },
     }
 });
 
-export const {addTodo} = ScheduleManipulationSlice.actions;
+export const {addSchedule} = ScheduleManipulationSlice.actions;
 
 export default ScheduleManipulationSlice.reducer;
 
