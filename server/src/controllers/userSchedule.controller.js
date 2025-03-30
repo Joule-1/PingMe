@@ -41,7 +41,7 @@ const addUserSchedule = asyncHandler(async function (req, res) {
     return res
               .status(201)
               .json(
-                new ApiResponse(201, newSchedule, "Schedule Created Successfully")
+                new ApiResponse(201, newSchedule, "Schedule Added Successfully")
               )
 });
 
@@ -56,7 +56,7 @@ const getUserSchedule = asyncHandler(async function (req, res) {
     return res
               .status(201)
               .json(
-                new ApiResponse(201, schedules, "Schedule Created Successfully")
+                new ApiResponse(201, schedules, "Schedule Retrieved Successfully")
               )
 
 });

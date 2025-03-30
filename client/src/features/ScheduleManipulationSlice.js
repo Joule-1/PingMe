@@ -1,4 +1,5 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
+import api from "../utils/Axios.js";
 
 const initialState = {
     userSchedules: [{id: 1, title: "Hello world", date: "44", time: "q2", priority: "Extreme", description: "skjdf"}],
@@ -8,7 +9,7 @@ const ScheduleManipulationSlice = createSlice({
     name: "userSchedule",
     initialState,
     reducers: {
-        addSchedule : (state, action) => {
+        addSchedule : async (state, action) => {
             const userSchedule = {
                 id: nanoid(),
                 // userid: action.payload.userid,
@@ -19,8 +20,10 @@ const ScheduleManipulationSlice = createSlice({
                 description: action.payload.description,
             }
             state.userSchedules.push(userSchedule)
-
-            //backend push
+            const res = await api.post("/add-user-schedule", userSchedule)
+            console.log("HEY")
+            console.log(res.data)
+             
         },
     }
 });
