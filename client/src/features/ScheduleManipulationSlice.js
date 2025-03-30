@@ -1,7 +1,7 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = {
-    userSchedules: [{id: 1, userid: "afsdgssgdsg2", title: "Hello world", date: "44", time: "q2", priority: "Extreme", description: "skjdf"}],
+    userSchedules: [{id: 1, title: "Hello world", date: "44", time: "q2", priority: "Extreme", description: "skjdf"}],
 };
 
 const ScheduleManipulationSlice = createSlice({
@@ -11,7 +11,7 @@ const ScheduleManipulationSlice = createSlice({
         addSchedule : (state, action) => {
             const userSchedule = {
                 id: nanoid(),
-                userid: action.payload.userid,
+                // userid: action.payload.userid,
                 title: action.payload.title,
                 date: action.payload.date,
                 time: action.payload.time,
@@ -19,6 +19,7 @@ const ScheduleManipulationSlice = createSlice({
                 description: action.payload.description,
             }
             state.userSchedules.push(userSchedule)
+
             //backend push
         },
     }
