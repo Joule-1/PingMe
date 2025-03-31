@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addSchedule } from "../features/ScheduleManipulationSlice";
+import {
+    addSchedule,
+    fetchSchedule,
+} from "../features/ScheduleManipulationSlice";
 import { CloseIcon } from "../assets";
 
 const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
@@ -9,11 +12,15 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
         title: "",
         date: "",
         time: "",
-        priority: "Moderate", // Default selection
+        priority: "Moderate",
         description: "",
     });
 
     const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     dispatch(fetchSchedule());
+    // }, [dispatch]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,15 +32,10 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        const newSchedule = {
-            ...formData,
-        };
-
-        dispatch(addSchedule(newSchedule));
+        // console.log(formData)
+        dispatch(addSchedule(formData));
 
         setFormData({
-            userid: "",
             title: "",
             date: "",
             time: "",
