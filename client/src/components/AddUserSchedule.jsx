@@ -32,18 +32,17 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // console.log(formData)
         dispatch(addSchedule(formData));
 
-        // setFormData({
-        //     title: "",
-        //     date: "",
-        //     time: "",
-        //     priority: "Moderate",
-        //     description: "",
-        // });
+        setFormData({
+            title: "",
+            date: "",
+            time: "",
+            priority: "Moderate",
+            description: "",
+        });
 
-        // setdisplayAddSchedule("hidden");
+        setdisplayAddSchedule("hidden");
     };
 
     return (

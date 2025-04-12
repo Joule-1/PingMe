@@ -13,23 +13,21 @@ const UserScheduleList = () => {
         dispatch(fetchSchedule());
     }, [dispatch]);
 
-    const userSchedules = useSelector((state) => state.userSchedules);
+    const userSchedules = useSelector((state) => state.userSchedule.userSchedules);
     
-    // console.log(userSchedules)
+    console.log(userSchedules)
     return (
         <section>
             <h2>User Schedules</h2>
 
             <ul>
-                {/* {userSchedules.map((schedule) => (
-                    <li key={schedule.id} className="border">
-                        <strong>{schedule.title}</strong> - {schedule.date} {schedule.time}  
+                {userSchedules.map((schedule) => (
+                    <li key={schedule.scheduleId} className="border">
+                        <strong>{schedule.scheduleTitle}</strong> - 
                         <br />
-                        <em>Priority:</em> {schedule.priority}  
                         <br />
-                        {schedule.description}
                     </li>
-                ))} */}
+                ))}
             </ul>
         </section>
     );
