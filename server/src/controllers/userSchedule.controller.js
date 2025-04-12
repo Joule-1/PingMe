@@ -13,6 +13,9 @@ const addUserSchedule = asyncHandler(async function (req, res) {
         scheduleDescription,
     } = req.body;
     const userId = req.user._id;
+    
+    console.log("📦 body:", req.body);
+console.log("👤 user:", req.user);
 
     if (
         [
@@ -25,7 +28,7 @@ const addUserSchedule = asyncHandler(async function (req, res) {
     ) {
         throw new ApiError(200, "All fields are required");
     }
-
+    console.log("Hey in Backend Server1")
     const newSchedule = await userSchedule({
         user: userId,
         scheduleId,
@@ -35,9 +38,16 @@ const addUserSchedule = asyncHandler(async function (req, res) {
         schedulePriority,
         scheduleDescription: scheduleDescription || "",
     });
+    console.log("Hey in Backend Server2")
 
-    await newSchedule.save();
+    try{
+        await newSchedule.save();
+    }
+    catch(error){
+        throw new ApiError(200, "Failed to Save User to Database")
+    }
 
+    console.log("Hey in Backend Server3")
     return res
               .status(201)
               .json(

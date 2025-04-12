@@ -15,7 +15,7 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
         priority: "Moderate",
         description: "",
     });
-
+    
     const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -35,15 +35,15 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
         // console.log(formData)
         dispatch(addSchedule(formData));
 
-        setFormData({
-            title: "",
-            date: "",
-            time: "",
-            priority: "Moderate",
-            description: "",
-        });
+        // setFormData({
+        //     title: "",
+        //     date: "",
+        //     time: "",
+        //     priority: "Moderate",
+        //     description: "",
+        // });
 
-        setdisplayAddSchedule("hidden");
+        // setdisplayAddSchedule("hidden");
     };
 
     return (

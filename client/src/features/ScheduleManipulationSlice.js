@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
 import api from "../utils/Axios.js";
 
 const initialState = {
@@ -20,11 +20,17 @@ export const addSchedule = createAsyncThunk(
     "addSchedule",
     async (scheduleData, { rejectWithValue }) => {
         try {
-            // console.log(scheduleData)
+
+            scheduleData = {
+                id: nanoid(),
+                ...scheduleData
+            }
+    
             const response = await api.post("/add-user-schedule", scheduleData);
-            // console.log(response.data)
+           
             return response.data.data;
         } catch (error) {
+            console.log(error)
             return rejectWithValue(
                 error.response?.data?.message || "Failed to add schedule"
             );
@@ -57,7 +63,6 @@ const ScheduleManipulationSlice = createSlice({
             })
             .addCase(fetchSchedule.fulfilled, (state, action) => {
                 state.isloading = false;
-                console.log(action.payload);
                 state.userSchedules = action.payload;
             })
             .addCase(fetchSchedule.rejected, (state, action) => {
@@ -70,7 +75,6 @@ const ScheduleManipulationSlice = createSlice({
             })
             .addCase(addSchedule.fulfilled, (state, action) => {
                 state.isloading = false;
-                console.log(action)
                 state.userSchedules.push(action.payload);
             })
             .addCase(addSchedule.rejected, (state, action) => {
@@ -80,6 +84,5 @@ const ScheduleManipulationSlice = createSlice({
     },
 });
 
-// export const { addSchedule } = ScheduleManipulationSlice.actions;
 
 export default ScheduleManipulationSlice.reducer;

@@ -15,7 +15,7 @@ const UserScheduleList = () => {
 
     const userSchedules = useSelector((state) => state.userSchedules);
     
-    console.log(userSchedules)
+    // console.log(userSchedules)
     return (
         <section>
             <h2>User Schedules</h2>
