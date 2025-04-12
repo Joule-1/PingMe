@@ -27,7 +27,9 @@ export const addSchedule = createAsyncThunk(
             }
     
             const response = await api.post("/add-user-schedule", scheduleData);
-           
+            console.log(response)
+            console.log(response.data.message)
+            console.log(response.data.data)
             return response.data.data;
         } catch (error) {
             console.log(error)
@@ -75,6 +77,7 @@ const ScheduleManipulationSlice = createSlice({
             })
             .addCase(addSchedule.fulfilled, (state, action) => {
                 state.isloading = false;
+                console.log(action.payload)
                 state.userSchedules.push(action.payload);
             })
             .addCase(addSchedule.rejected, (state, action) => {

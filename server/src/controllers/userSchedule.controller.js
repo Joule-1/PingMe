@@ -1,35 +1,20 @@
-import userSchedule from "../models/userSchedule.model.js";
+import UserSchedule from "../models/userSchedule.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 const addUserSchedule = asyncHandler(async function (req, res) {
     const {
-        scheduleId,
-        scheduleTitle,
-        scheduleDate,
-        scheduleTime,
-        schedulePriority,
-        scheduleDescription,
+        id: scheduleId,
+        title: scheduleTitle,
+        date: scheduleDate,
+        time: scheduleTime,
+        priority: schedulePriority,
+        description: scheduleDescription,
     } = req.body;
     const userId = req.user._id;
-    
-    console.log("📦 body:", req.body);
-console.log("👤 user:", req.user);
-
-    if (
-        [
-            scheduleId,
-            scheduleTitle,
-            scheduleDate,
-            scheduleTime,
-            schedulePriority,
-        ].some((field) => field?.trim() === "")
-    ) {
-        throw new ApiError(200, "All fields are required");
-    }
-    console.log("Hey in Backend Server1")
-    const newSchedule = await userSchedule({
+      
+    const newSchedule = await UserSchedule({
         user: userId,
         scheduleId,
         scheduleTitle,
@@ -38,16 +23,18 @@ console.log("👤 user:", req.user);
         schedulePriority,
         scheduleDescription: scheduleDescription || "",
     });
-    console.log("Hey in Backend Server2")
-
-    try{
+     
+    if(!newSchedule){
+        throw new ApiError(200, "Failed To Make Schedule Model")
+    }
+    
+    try {
         await newSchedule.save();
+    } catch (err) {
+        throw new ApiError(200, err._message);
+        
     }
-    catch(error){
-        throw new ApiError(200, "Failed to Save User to Database")
-    }
-
-    console.log("Hey in Backend Server3")
+    
     return res
               .status(201)
               .json(
@@ -57,9 +44,9 @@ console.log("👤 user:", req.user);
 
 const getUserSchedule = asyncHandler(async function (req, res) {
     const userId = req.user._id;
-    const schedules = await userSchedule.find({user: userId});
+    const schedules = await UserSchedule.find({user: userId});
 
-    if(!schedules.length){
+    if(!schedules.length){ 
         throw new ApiError(200, "No Schedule Found");
     }
 
