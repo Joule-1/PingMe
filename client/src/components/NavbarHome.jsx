@@ -2,8 +2,6 @@ import React from "react";
 import { Logo } from "../assets";
 import { Link } from "react-router-dom";
 
-const imgStyle = "w-5 hover:scale-105";
-
 const NavbarHome = () => {
     return (
         <section className="flex h-15 z-50 fixed w-full place-content-evenly items-center shadow-lg bg-white text-sm">
@@ -15,16 +13,16 @@ const NavbarHome = () => {
             </div>
             <div className="flex items-center">
                 <span className="ml-10 cursor-pointer hover:text-[#4b82ff]">
-                    Features
+                Privacy
                 </span>
                 <Link
                     to="/privacy"
                     className="ml-10 cursor-pointer hover:text-[#4b82ff]"
                 >
-                    Privacy
+                    Pricing
                 </Link>
                 <span className="ml-10 cursor-pointer hover:text-[#4b82ff]">
-                    Pricing
+                    Testimonials
                 </span>
             </div>
             <div className="flex items-center">

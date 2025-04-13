@@ -2,10 +2,10 @@ import React from "react";
 import NavbarHome from "./NavbarHome";
 import {
     Logo,
-    HomeCalendarIcon,
+    HomeCalendarIcon1,
+    HomeCalendarIcon2,
     ChecklistPenIcon,
     ChecklistNoteIcon,
-    TaskIcon,
     TestimoniaIcon1,
     TestimoniaIcon2,
     TestimoniaIcon3,
@@ -13,6 +13,7 @@ import {
     TestimoniaIcon5,
     TestimoniaIcon6,
 } from "../assets";
+import FooterHome from "./FooterHome";
 
 const Home = () => {
     return (
@@ -26,7 +27,7 @@ const Home = () => {
                     <img src={ChecklistNoteIcon} className="w-full" />
                 </span>
                 <span className="absolute top-30 left-15 w-60">
-                    <img src={HomeCalendarIcon} className="w-full" />
+                    <img src={HomeCalendarIcon1} className="w-full" />
                 </span>
             </div>
             <div className="flex h-screen items-center justify-center">
@@ -243,7 +244,7 @@ const Home = () => {
                             </span>
                         </span>
                     </div>
-                    <div className="flex scale-110 flex-col rounded-xl border border-gray-400 bg-[#4b82ff] p-5 px-8 shadow-xl transition-all duration-500 hover:scale-111">
+                    <div className="flex scale-110 flex-col rounded-xl border border-[#4b82ff] bg-[#4b82ff] p-5 px-8 shadow-xl transition-all duration-500 hover:scale-111">
                         <span className="poppins-semibold my-1 text-xl text-white">
                             Pro Plan
                         </span>
@@ -322,7 +323,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex h-screen flex-col items-center justify-center"></div>
+            <FooterHome />
         </section>
     );
 };
