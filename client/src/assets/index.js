@@ -21,6 +21,17 @@ import UserAvatarDefaultIcon from "./UserDashboardIcons/UserAvatarDefaultIcon.pn
 import SearchIcon from "./UserDashboardIcons/SearchIcon.png";
 import ThemeToggle_Dark from "./ThemeChangeIcons/ThemeToggle_Dark.png";
 import ThemeToggle_Light from "./ThemeChangeIcons/ThemeToggle_Light.png";
+import ChecklistPenIcon from "./HomeIcons/ChecklistPenIcon.png";
+import ChecklistNoteIcon from "./HomeIcons/ChecklistNoteIcon.png";
+import HomeCalendarIcon from "./HomeIcons/HomeCalendarIcon.png";
+import TaskIcon from "./HomeIcons/TaskIcon.png";
+import TestimoniaIcon6 from "./HomeIcons/TestimoniaIcon6.jpg";
+import TestimoniaIcon5 from "./HomeIcons/TestimoniaIcon5.jpg";
+import TestimoniaIcon4 from "./HomeIcons/TestimoniaIcon4.jpg";
+import TestimoniaIcon3 from "./HomeIcons/TestimoniaIcon3.jpg";
+import TestimoniaIcon2 from "./HomeIcons/TestimoniaIcon2.jpg";
+import TestimoniaIcon1 from "./HomeIcons/TestimoniaIcon1.jpg";
+
 
 export {
     Logo,
@@ -46,4 +57,14 @@ export {
     SearchIcon,
     ThemeToggle_Light,
     ThemeToggle_Dark,
+    ChecklistPenIcon,
+    ChecklistNoteIcon,
+    HomeCalendarIcon,
+    TaskIcon,
+    TestimoniaIcon6,
+    TestimoniaIcon5,
+    TestimoniaIcon4,
+    TestimoniaIcon3,
+    TestimoniaIcon2,
+    TestimoniaIcon1
 };

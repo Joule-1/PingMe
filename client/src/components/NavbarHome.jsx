@@ -6,7 +6,7 @@ const imgStyle = "w-5 hover:scale-105";
 
 const NavbarHome = () => {
     return (
-        <section className="shadom-md fixed z-10 flex h-15 w-full place-content-evenly items-center border-2 bg-white text-sm">
+        <section className="flex h-15 z-50 fixed w-full place-content-evenly items-center shadow-lg bg-white text-sm">
             <div className="flex items-center">
                 <div className={`w-10 hover:scale-105`}>
                     <img src={Logo} className="w-full" />
