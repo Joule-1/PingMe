@@ -12,10 +12,14 @@ import {
     TestimoniaIcon4,
     TestimoniaIcon5,
     TestimoniaIcon6,
+    TaskIcon,
+    CheckBoxIcon,
+    CommentIcon,
+    ThemeToggle_Dark,
 } from "../assets";
-import FooterHome from "./FooterHome";
 
 const Home = () => {
+    const currentYear = new Date().getFullYear();
     return (
         <section>
             <NavbarHome />
@@ -323,7 +327,54 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <FooterHome />
+            <div className="bg-gray-100 px-10 pt-5">
+                <div>
+                    <div className="flex items-center">
+                        <div className={`w-10 hover:scale-105`}>
+                            <img src={Logo} className="w-full" />
+                        </div>
+                        <span className="poppins-semibold ml-2 text-xl">
+                            PingMe
+                        </span>
+                    </div>
+                </div>
+                <div className="poppins-medium my-5 text-xl">
+                    Stay organized and boost your productivity
+                </div>
+                <div className="flex items-center justify-evenly">
+                    <div className="relative w-25 rotate-20 rounded-xl bg-gray-50 p-2 shadow-xl">
+                        <img src={TaskIcon} className="w-full" />
+                    </div>
+                    <div className="relative bottom-[-60px] w-25 -rotate-30 rounded-xl bg-gray-50 p-2 shadow-2xl">
+                        <img src={CheckBoxIcon} />
+                    </div>
+                    <div className="relative w-25 rotate-35 rounded-xl bg-gray-50 p-2 shadow-xl">
+                        <img src={HomeCalendarIcon2} />
+                    </div>
+                    <div className="relative bottom-[-30px] w-25 -rotate-15 rounded-xl bg-gray-50 p-2 shadow-xl">
+                        <img src={CommentIcon} />
+                    </div>
+                    <div className="relative w-25 rotate-35 rounded-xl bg-gray-50 p-2 shadow-xl">
+                        <img src={ThemeToggle_Dark} />
+                    </div>
+                </div>
+                <hr className="mt-20 border-gray-300" />
+                <div className="flex justify-between py-5 text-sm text-gray-600">
+                    <div>© {currentYear}. All rights reserved.</div>
+                    <div>
+                        <span className="mx-2 cursor-pointer">
+                            Privacy Policy
+                        </span>
+                        <span className="mx-2 cursor-pointer">
+                            Terms of Service
+                        </span>
+                        <span className="mx-2 cursor-pointer">Pricing</span>
+                        <span className="mx-2 cursor-pointer">
+                            Testimonials
+                        </span>
+                    </div>
+                </div>
+            </div>
         </section>
     );
 };
