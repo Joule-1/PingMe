@@ -24,26 +24,26 @@ const Home = () => {
         <section>
             <NavbarHome />
             <div>
-                <span className="absolute right-5 bottom-10 w-60">
-                    <img src={ChecklistPenIcon} className="w-full" />
-                </span>
-                <span className="absolute bottom-[-100px] left-15 w-40">
-                    <img src={ChecklistNoteIcon} className="w-full" />
-                </span>
-                <span className="absolute top-30 left-15 w-60">
+                <div className="absolute hidden sm:top-20 sm:left-5 sm:block sm:w-40">
                     <img src={HomeCalendarIcon1} className="w-full" />
-                </span>
+                </div>
+                <div className="absolute hidden sm:right-10 sm:bottom-15 sm:block sm:w-35">
+                    <img src={ChecklistPenIcon} className="w-full" />
+                </div>
+                <div className="absolute hidden sm:-bottom-8 sm:left-5 sm:block sm:w-30">
+                    <img src={ChecklistNoteIcon} className="w-full" />
+                </div>
             </div>
-            <div className="flex h-screen items-center justify-center">
+            <div className="pt-20 sm:pt-0 flex items-center justify-center sm:h-screen">
                 <div className="flex flex-col items-center">
                     <span className="w-22 rounded-2xl shadow-2xl">
                         <img src={Logo} />
                     </span>
-                    <div className="poppins-bold my-6 text-5xl">
+                    <div className="poppins-bold my-6 text-2xl sm:text-5xl">
                         Track. Plan.{" "}
                         <span className="text-[#4b82ff]">Succeed.</span>
                     </div>
-                    <div className="poppins-semibold text-base text-gray-500">
+                    <div className="poppins-semibold px-5 text-center text-sm text-gray-500 sm:text-base">
                         PingMe isn’t just how you get things done—it’s how you
                         rise, reign, and rewrite reality with every move you
                         make.”
@@ -53,18 +53,18 @@ const Home = () => {
                     </button>
                 </div>
             </div>
-            <div className="flex h-screen flex-col items-center justify-center">
-                <div className="poppins-semibold my-5 text-4xl">
+
+            <div className="flex flex-col items-center justify-center">
+                <div className="poppins-semibold my-5 text-xl text-center sm:text-2xl">
                     People just like you are already using PingMe
                 </div>
-                <div className="my-5 grid grid-cols-3 gap-5 px-30">
-                    <div className="row-span-15 flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl">
-                        <div className="poppins-medium text-sm leading-7">
+                <div className="my-5 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:px-2 lg:gap-5 lg:px-15 xl:px-30">
+                    <div className="flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl md:row-span-15">
+                        <div className="poppins-medium text-sm leading-7 sm:leading-7 md:leading-6 lg:leading-7">
                             “In this app, time collapses and intention
                             transforms into cosmic action. Every task is not
                             merely completed — it is manifested from the very
-                            ether of possibility. It is a force of nature, a
-                            tool that reshapes the universe through sheer will.”
+                            ether of possibility.”
                         </div>
                         <div className="my-1 flex gap-2">
                             <span className="">
@@ -73,18 +73,18 @@ const Home = () => {
                                     className="h-full w-10 rounded-lg"
                                 />
                             </span>
-                            <span className="flex flex-col">
-                                <span className="poppins-bold text-base text-gray-400">
+                            <span className="flex flex-col justify-end">
+                                <span className="poppins-bold text-base text-gray-400 md:text-sm lg:text-sm">
                                     Lysandra O.
                                 </span>
-                                <span className="poppins-bold text-base text-gray-600">
+                                <span className="poppins-bold text-base text-gray-600 md:text-sm">
                                     Temporal Sovereign
                                 </span>
                             </span>
                         </div>
                     </div>
-                    <div className="row-span-8 flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl">
-                        <div className="poppins-medium text-sm leading-7">
+                    <div className="flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl md:row-span-8">
+                        <div className="poppins-medium text-sm leading-7 sm:leading-7 md:leading-6 lg:leading-7">
                             “This app is not bound by the laws of reality. It is
                             a vortex, pulling your goals into existence with a
                             power that warps time itself.”
@@ -96,18 +96,18 @@ const Home = () => {
                                     className="h-full w-10 rounded-lg"
                                 />
                             </span>
-                            <span className="flex flex-col">
-                                <span className="poppins-bold text-base text-gray-400">
+                            <span className="flex flex-col justify-end">
+                                <span className="poppins-bold text-base text-gray-400 md:text-sm lg:text-sm">
                                     Riven X.
                                 </span>
-                                <span className="poppins-bold text-base text-gray-600">
+                                <span className="poppins-bold text-base text-gray-600 md:text-sm">
                                     Architect of the Void
                                 </span>
                             </span>
                         </div>
                     </div>
-                    <div className="row-span-8 flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl">
-                        <div className="poppins-medium text-sm leading-7">
+                    <div className="flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl md:row-span-8">
+                        <div className="poppins-medium text-sm leading-7 sm:leading-7 md:leading-6 lg:leading-7">
                             “To use this app is to become the weaver of fate.
                             Every action you take sends ripples through the
                             fabric of the multiverse.”
@@ -119,18 +119,18 @@ const Home = () => {
                                     className="h-full w-10 rounded-lg"
                                 />
                             </span>
-                            <span className="flex flex-col">
-                                <span className="poppins-bold text-base text-gray-400">
+                            <span className="flex flex-col justify-end">
+                                <span className="poppins-bold text-base text-gray-400 md:text-sm lg:text-sm">
                                     Eirlys A.
                                 </span>
-                                <span className="poppins-bold text-base text-gray-600">
+                                <span className="poppins-bold text-base text-gray-600 md:text-sm">
                                     Alchemist of the Infinite
                                 </span>
                             </span>
                         </div>
                     </div>
-                    <div className="row-span-15 flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl">
-                        <div className="poppins-medium text-sm leading-7">
+                    <div className="flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl md:row-span-15">
+                        <div className="poppins-medium text-sm leading-7 sm:leading-7 md:leading-6 lg:leading-7">
                             “This is not a to-do list. This is a manifestation
                             engine — one that transfigures intention into
                             reality at the quantum level. Purpose flows through
@@ -144,23 +144,22 @@ const Home = () => {
                                     className="h-full w-10 rounded-lg"
                                 />
                             </span>
-                            <span className="flex flex-col">
-                                <span className="poppins-bold text-base text-gray-400">
+                            <span className="flex flex-col justify-end">
+                                <span className="poppins-bold text-base text-gray-400 md:text-sm lg:text-sm">
                                     Sable V.
                                 </span>
-                                <span className="poppins-bold text-base text-gray-600">
+                                <span className="poppins-bold text-base text-gray-600 md:text-sm">
                                     Architect of Destiny
                                 </span>
                             </span>
                         </div>
                     </div>
-                    <div className="row-span-15 flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl">
-                        <div className="poppins-medium text-sm leading-7">
+                    <div className="flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl md:row-span-15">
+                        <div className="poppins-medium text-sm leading-7 sm:leading-7 md:leading-6 lg:leading-7">
                             “To use this app is to hold the very blueprints of
                             the universe in your hands. It is a portal through
                             which you manifest your goals, bending time and
-                            space to your will. Each task you complete echoes
-                            across eternity, rewriting your fate.”
+                            space to your will.”
                         </div>
                         <div className="my-1 flex gap-2">
                             <span className="">
@@ -169,19 +168,19 @@ const Home = () => {
                                     className="h-full w-10 rounded-lg"
                                 />
                             </span>
-                            <span className="flex flex-col">
-                                <span className="poppins-bold text-base text-gray-400">
+                            <span className="flex flex-col justify-end">
+                                <span className="poppins-bold text-base text-gray-400 md:text-sm lg:text-sm">
                                     Thalax S.
                                 </span>
-                                <span className="poppins-bold text-base text-gray-600">
+                                <span className="poppins-bold text-base text-gray-600 md:text-sm">
                                     Transcendent Sage
                                 </span>
                             </span>
                         </div>
                     </div>
 
-                    <div className="row-span-8 flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl">
-                        <div className="poppins-medium text-sm leading-7">
+                    <div className="flex flex-col justify-between rounded-xl border border-gray-400 bg-gray-50 p-5 transition-all duration-500 hover:border-white hover:bg-white hover:shadow-xl md:row-span-8">
+                        <div className="poppins-medium text-sm leading-7 sm:leading-7 md:leading-6 lg:leading-7">
                             “This app is a living force, binding time,
                             intention, and action into an infinite spiral of
                             creation. It is not a tool — it is the heartbeat of
@@ -194,11 +193,11 @@ const Home = () => {
                                     className="h-full w-10 rounded-lg"
                                 />
                             </span>
-                            <span className="flex flex-col">
-                                <span className="poppins-bold text-base text-gray-400">
+                            <span className="flex flex-col justify-end">
+                                <span className="poppins-bold text-base text-gray-400 md:text-sm lg:text-sm">
                                     Icarus M.
                                 </span>
-                                <span className="poppins-bold text-base text-gray-600">
+                                <span className="poppins-bold text-base text-gray-600 md:text-sm">
                                     Keeper of the Infinite Path
                                 </span>
                             </span>
@@ -206,7 +205,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex h-screen flex-col items-center justify-center">
+
+            <div className="flex flex-col items-center justify-center mb-10">
                 <div className="poppins-semibold my-5 text-4xl">
                     People just like you are already using PingMe
                 </div>
@@ -327,6 +327,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
             <div className="bg-gray-100 px-10 pt-5">
                 <div>
                     <div className="flex items-center">
