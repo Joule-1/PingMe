@@ -1,5 +1,6 @@
 import React from "react";
 import NavbarHome from "./NavbarHome";
+import { Link } from "react-router-dom";
 import {
     Logo,
     HomeCalendarIcon1,
@@ -16,6 +17,7 @@ import {
     CheckBoxIcon,
     CommentIcon,
     ThemeToggle_Dark,
+    BrandIcon,
 } from "../assets";
 
 const Home = () => {
@@ -34,7 +36,7 @@ const Home = () => {
                     <img src={ChecklistNoteIcon} className="w-full" />
                 </div>
             </div>
-            <div className="pt-20 sm:pt-0 flex items-center justify-center sm:h-screen">
+            <div className="flex items-center justify-center pt-20 sm:h-screen sm:pt-0">
                 <div className="flex flex-col items-center">
                     <span className="w-22 rounded-2xl shadow-2xl">
                         <img src={Logo} />
@@ -55,7 +57,7 @@ const Home = () => {
             </div>
 
             <div className="flex flex-col items-center justify-center">
-                <div className="poppins-semibold my-5 text-xl text-center sm:text-2xl">
+                <div className="poppins-semibold my-5 text-center text-lg sm:text-xl">
                     People just like you are already using PingMe
                 </div>
                 <div className="my-5 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:px-2 lg:gap-5 lg:px-15 xl:px-30">
@@ -206,11 +208,11 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center mb-10">
-                <div className="poppins-semibold my-5 text-4xl">
-                    People just like you are already using PingMe
+            <div className="mb-20 flex flex-col items-center justify-center">
+                <div className="poppins-semibold mt-10 mb-5 text-base text-lg sm:text-xl">
+                    Unlock Your Experience
                 </div>
-                <div className="mt-10 flex gap-8">
+                <div className="mt-10 flex flex-wrap justify-center gap-8">
                     <div className="flex flex-col rounded-xl border border-gray-400 bg-gray-50 p-5 px-8 transition-all duration-500 hover:scale-101">
                         <span className="poppins-semibold my-1 text-xl">
                             Basic Plan
@@ -248,7 +250,7 @@ const Home = () => {
                             </span>
                         </span>
                     </div>
-                    <div className="flex scale-110 flex-col rounded-xl border border-[#4b82ff] bg-[#4b82ff] p-5 px-8 shadow-xl transition-all duration-500 hover:scale-111">
+                    <div className="flex scale-110 flex-col rounded-xl border border-[#4b82ff] bg-[#4b82ff] p-5 px-5 shadow-xl transition-all duration-500 hover:scale-111 md:px-8">
                         <span className="poppins-semibold my-1 text-xl text-white">
                             Pro Plan
                         </span>
@@ -328,7 +330,17 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="bg-gray-100 px-10 pt-5">
+            <div className="mb-5 mt-10">
+                <div className="poppins-semibold my-5 text-center text-lg sm:text-xl">
+                    Join a community of millions of users globally who are using
+                    PingMe to get more done.
+                </div>
+                <div className="flex justify-center">
+                    <img src={BrandIcon} />
+                </div>
+            </div>
+
+            <div className="bg-gray-100 pt-5 sm:px-10">
                 <div>
                     <div className="flex items-center">
                         <div className={`w-10 hover:scale-105`}>
@@ -339,40 +351,44 @@ const Home = () => {
                         </span>
                     </div>
                 </div>
-                <div className="poppins-medium my-5 text-xl">
+                <div className="poppins-medium my-5 px-2 text-center text-sm sm:text-xl">
                     Stay organized and boost your productivity
                 </div>
                 <div className="flex items-center justify-evenly">
-                    <div className="relative w-25 rotate-20 rounded-xl bg-gray-50 p-2 shadow-xl">
+                    <div className="relative w-20 rotate-20 rounded-xl bg-gray-50 p-2 shadow-xl">
                         <img src={TaskIcon} className="w-full" />
                     </div>
-                    <div className="relative bottom-[-60px] w-25 -rotate-30 rounded-xl bg-gray-50 p-2 shadow-2xl">
+                    <div className="relative bottom-[-60px] w-20 -rotate-30 rounded-xl bg-gray-50 p-2 shadow-2xl">
                         <img src={CheckBoxIcon} />
                     </div>
-                    <div className="relative w-25 rotate-35 rounded-xl bg-gray-50 p-2 shadow-xl">
+                    <div className="relative w-20 rotate-35 rounded-xl bg-gray-50 p-2 shadow-xl">
                         <img src={HomeCalendarIcon2} />
                     </div>
-                    <div className="relative bottom-[-30px] w-25 -rotate-15 rounded-xl bg-gray-50 p-2 shadow-xl">
+                    <div className="relative bottom-[-30px] w-20 -rotate-15 rounded-xl bg-gray-50 p-2 shadow-xl">
                         <img src={CommentIcon} />
                     </div>
-                    <div className="relative w-25 rotate-35 rounded-xl bg-gray-50 p-2 shadow-xl">
+                    <div className="relative right-4 bottom-[15px] w-20 rotate-35 rounded-xl bg-gray-50 p-2 shadow-xl">
                         <img src={ThemeToggle_Dark} />
                     </div>
                 </div>
                 <hr className="mt-20 border-gray-300" />
-                <div className="flex justify-between py-5 text-sm text-gray-600">
-                    <div>© {currentYear}. All rights reserved.</div>
-                    <div>
-                        <span className="mx-2 cursor-pointer">
+                <div className="poppins-semibold flex flex-wrap justify-center py-5 text-sm text-gray-600 sm:justify-between">
+                    <div className="my-auto">
+                        © {currentYear}. All rights reserved.
+                    </div>
+                    <div className="my-5 flex flex-wrap justify-center">
+                        <div className="mx-2 mb-4 cursor-pointer hover:text-[#4b82ff]">
                             Privacy Policy
-                        </span>
-                        <span className="mx-2 cursor-pointer">
+                        </div>
+                        <div className="mx-2 mb-4 cursor-pointer hover:text-[#4b82ff]">
                             Terms of Service
-                        </span>
-                        <span className="mx-2 cursor-pointer">Pricing</span>
-                        <span className="mx-2 cursor-pointer">
+                        </div>
+                        <div className="mx-2 cursor-pointer hover:text-[#4b82ff]">
+                            Pricing
+                        </div>
+                        <div className="mx-2 cursor-pointer hover:text-[#4b82ff]">
                             Testimonials
-                        </span>
+                        </div>
                     </div>
                 </div>
             </div>

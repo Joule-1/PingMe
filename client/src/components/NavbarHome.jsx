@@ -22,7 +22,8 @@ const NavbarHome = () => {
                     Pricing
                 </Link>
                 <span className="sm:ml-10 mx-5 cursor-pointer hover:text-[#4b82ff]">
-                    Testimonials
+                    <Link to="/privacy">
+                    Testimonials</Link>
                 </span>
             </div>
             <div className="flex items-center">

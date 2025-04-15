@@ -34,6 +34,7 @@ import TestimoniaIcon4 from "./HomeIcons/TestimoniaIcon4.jpg";
 import TestimoniaIcon3 from "./HomeIcons/TestimoniaIcon3.jpg";
 import TestimoniaIcon2 from "./HomeIcons/TestimoniaIcon2.jpg";
 import TestimoniaIcon1 from "./HomeIcons/TestimoniaIcon1.jpg";
+import BrandIcon from "./HomeIcons/BrandIcon.svg";
 
 export {
     Logo,
@@ -72,4 +73,5 @@ export {
     TestimoniaIcon3,
     TestimoniaIcon2,
     TestimoniaIcon1,
+    BrandIcon
 };

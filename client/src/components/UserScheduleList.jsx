@@ -20,7 +20,7 @@ const UserScheduleList = () => {
         <section>
             <h2>User Schedules</h2>
 
-            <ul>
+            {/* <ul>
                 {userSchedules.map((schedule) => (
                     <li key={schedule.scheduleId} className="border">
                         <strong>{schedule.scheduleTitle}</strong> - 
@@ -28,7 +28,7 @@ const UserScheduleList = () => {
                         <br />
                     </li>
                 ))}
-            </ul>
+            </ul> */}
         </section>
     );
 };
