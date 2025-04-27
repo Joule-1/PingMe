@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import api from "../utils/Axios.js";
 import validator from "validator";
 import { UserContext } from "../utils/UserProvider.jsx";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const SignUp = () => {
     // const { userid, setUserId } = useContext(UserContext);
@@ -154,19 +156,20 @@ const SignUp = () => {
                     <div className="poppins-semibold my-4 text-xs">
                         Sign Up with Open account
                     </div>
-                    <div className="poppins-semibold flex">
-                        <div className="mr-2 flex cursor-pointer items-center justify-center rounded-lg border-1 border-gray-400 px-10 py-2 hover:border-gray-600">
-                            <div className="w-5">
-                                <img src={GoogleIcon} />
-                            </div>
-                            <span>&nbsp;&nbsp;Google</span>
+                    <div className="poppins-semibold mr-2 flex w-80 cursor-pointer items-center justify-center rounded-lg border-1 border-gray-400 px-10 py-2 hover:border-gray-600">
+                        <div className="w-5">
+                            <img src={GoogleIcon} />
                         </div>
-                        <div className="flex cursor-pointer items-center justify-center rounded-lg border-1 border-gray-400 px-10 py-2 hover:border-gray-600">
-                            <div className="w-5">
-                                <img src={AppleIcon} />
-                            </div>
-                            <span>&nbsp;&nbsp;Apple ID</span>
-                        </div>
+                        <GoogleLogin
+                            onSuccess={(credentialResponse) => {
+                                console.log(credentialResponse);
+                                console.log(
+                                    jwtDecode(credentialResponse.credential)
+                                );
+                            }}
+                            onError={() => console.log("Login Failed")}
+                        />
+                        <span>&nbsp;&nbsp;Sign Up With Google</span>
                     </div>
                     <hr className="my-6 border-1 border-gray-200" />
                     <div className="poppins-semibold text-xs">
@@ -194,7 +197,6 @@ const SignUp = () => {
                                     className="h-12 w-full pl-2"
                                     autoComplete="off"
                                     ref={nameRef}
-                                    autoFocus
                                     onBlur={validateName}
                                 />
                             </div>
