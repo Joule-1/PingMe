@@ -32,6 +32,10 @@ const userSchema = new Schema(
             required: [true, "Password is required"],
             validate: [validator.isStrongPassword, "Invalid Password"],
         },
+        googleSignUp: {
+            type: Boolean,
+            required: [true, "SignUp method is required"]
+        },
         refreshToken: {
             type: String,
         },

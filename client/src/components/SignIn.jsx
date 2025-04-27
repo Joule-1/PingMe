@@ -74,7 +74,7 @@ const SignIn = () => {
         }
 
         try {
-            const res = await api.post("users/", {
+            const res = await api.post("/login", {
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
             });
@@ -236,7 +236,7 @@ const SignIn = () => {
                                 Don't have an account?
                             </span>
                             <span className="poppins-semibold ml-2 cursor-pointer rounded-xl text-[#4b82ff] hover:underline">
-                                <Link to="/signin">Sign Up</Link>
+                                <Link to="/signup">Sign Up</Link>
                             </span>
                         </div>
                     </form>

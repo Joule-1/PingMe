@@ -31,7 +31,11 @@ const registerUser = asyncHandler(async function (req, res) {
     //  check if user created
     //  return response
 
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password, googleSignUp } = req.body;
+
+    if(password == null && googleSignUp == false){
+        throw new ApiError(200, "System Arbitration.");
+    }
 
     if ([fullname, email, password].some((field) => field?.trim() === "")) {
         throw new ApiError(200, "All fields are required.");
@@ -56,6 +60,7 @@ const registerUser = asyncHandler(async function (req, res) {
         email,
         userImage: uploadUserImage?.url || "",
         password,
+        googleSignUp
     });
 
     console.log(user._id);
@@ -67,7 +72,8 @@ const registerUser = asyncHandler(async function (req, res) {
         const firstError =
             error.errors.fullname ||
             error.errors.email ||
-            error.errors.password;
+            error.errors.password ||
+            error.errors.googleSignUp;
 
         throw new ApiError(200, firstError.properties.message);
     }

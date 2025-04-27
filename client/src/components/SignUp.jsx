@@ -98,22 +98,45 @@ const SignUp = () => {
             );
             return;
         }
-
         try {
             const res = await api.post("/register", {
                 fullname: nameRef.current.value,
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
+                googleSignUp: false
             });
             console.log(res.data);
             if (res.data.success == false) {
                 console.log(res.data.message);
             } else {
                 console.log("User ID:", res.data.data._id);
-
-                // setUserId(res.data.data._id);
                 navigate(`/dashboard/${res.data.data._id}`);
+                nameRef.current.value = "";
+                emailRef.current.value = "";
+                passwordRef.current.value = "";
+            }
+        } catch (error) {
+            console.error(
+                "Error:",
+                error.response?.data?.message || error.message
+            );
+        }
+    }
 
+    async function handleGoogleSubmission(fullname, email){
+        try {
+            const res = await api.post("/register", {
+                fullname,
+                email,
+                password: "gooleU5erpa$swOord",
+                googleSignUp: true
+            });
+            console.log(res.data);
+            if (res.data.success == false) {
+                console.log(res.data.message);
+            } else {
+                console.log("User ID:", res.data.data._id);
+                navigate(`/dashboard/${res.data.data._id}`);
                 nameRef.current.value = "";
                 emailRef.current.value = "";
                 passwordRef.current.value = "";
@@ -157,19 +180,20 @@ const SignUp = () => {
                         Sign Up with Open account
                     </div>
                     <div className="poppins-semibold mr-2 flex w-80 cursor-pointer items-center justify-center rounded-lg border-1 border-gray-400 px-10 py-2 hover:border-gray-600">
-                        <div className="w-5">
+                        {/* <div className="w-5">
                             <img src={GoogleIcon} />
-                        </div>
+                        </div> */}
                         <GoogleLogin
                             onSuccess={(credentialResponse) => {
                                 console.log(credentialResponse);
-                                console.log(
-                                    jwtDecode(credentialResponse.credential)
-                                );
+                                 console.log(credentialResponse.credential)
+                                const decoded = jwtDecode(credentialResponse.credential);
+                                console.log(decoded.name)
+                                handleGoogleSubmission(decoded.name, decoded.email)                                
                             }}
                             onError={() => console.log("Login Failed")}
                         />
-                        <span>&nbsp;&nbsp;Sign Up With Google</span>
+                        {/* <span>&nbsp;&nbsp;Sign Up With Google</span> */}
                     </div>
                     <hr className="my-6 border-1 border-gray-200" />
                     <div className="poppins-semibold text-xs">
@@ -223,12 +247,9 @@ const SignUp = () => {
                                     id="email"
                                     placeholder="Email"
                                     className="h-12 w-full pl-2"
-                                    // minLength={6}
-                                    // maxLength={254}
                                     ref={emailRef}
                                     onBlur={validateEmail}
                                     autoComplete="off"
-                                    // required
                                 />
                             </div>
                             <span
