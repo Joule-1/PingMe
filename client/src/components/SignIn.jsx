@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Logo,
     MailIcon,
@@ -19,7 +20,7 @@ const SignIn = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
     const buttonRef = useRef();
-
+    const navigate = useNavigate();
     const [emailError, setEmailError] = useState();
     const [passwordError, setPasswordError] = useState();
 
@@ -78,10 +79,10 @@ const SignIn = () => {
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
             });
-            console.log("User ID:", res.data.data._id);
-
-            emailRef.current.value = "";
-            passwordRef.current.value = "";
+            console.log("User ID:", res.data.data.loggedInUser._id);
+            navigate(`/dashboard/${res.data.data.loggedInUser._id}`);
+            // emailRef.current.value = "";
+            // passwordRef.current.value = "";
         } catch (error) {
             console.error(
                 "Error:",
