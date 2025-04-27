@@ -111,34 +111,44 @@ const Home = () => {
                     </div>
                     <div className="my-5 flex flex-wrap justify-center">
                         <div className="mx-2 mb-4 cursor-pointer hover:text-[#4b82ff]">
-                            <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                            <a
+                                href="/privacy"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Privacy Policy
+                            </a>
                         </div>
                         <div className="mx-2 mb-4 cursor-pointer hover:text-[#4b82ff]">
-                            
-                            <a href="/tos" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+                            <a
+                                href="/tos"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Terms of Service
+                            </a>
                         </div>
                         <div className="mx-2 cursor-pointer hover:text-[#4b82ff]">
                             <Link
-                                                to="pricings"
-                                                id="pricings"
-                                                offset={-40}
-                                                smooth={true}
-                                                duration={500}
-                                                 
-                                            >
-                                                Pricing
-                                            </Link>
+                                to="pricings"
+                                id="pricings"
+                                offset={-40}
+                                smooth={true}
+                                duration={500}
+                            >
+                                Pricing
+                            </Link>
                         </div>
                         <div className="mx-2 cursor-pointer hover:text-[#4b82ff]">
                             <Link
-                                                    to="testimonials"
-                                                    id="testimonials"
-                                                    offset={-60}
-                                                    smooth={true}
-                                                    duration={500}
-                                                >
-                                                    Testimonials
-                                                </Link>
+                                to="testimonials"
+                                id="testimonials"
+                                offset={-60}
+                                smooth={true}
+                                duration={500}
+                            >
+                                Testimonials
+                            </Link>
                         </div>
                     </div>
                 </div>
