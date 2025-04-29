@@ -33,9 +33,9 @@ const registerUser = asyncHandler(async function (req, res) {
 
     const { fullname, email, password, googleSignUp } = req.body;
 
-    if(password == null && googleSignUp == false){
+    if((password == "g*0oleU5erpa$swOord" && googleSignUp == false) || (password != "g*0oleU5erpa$swOord" && googleSignUp == true)){
         throw new ApiError(200, "System Arbitration.");
-    }
+    }   
 
     if ([fullname, email, password].some((field) => field?.trim() === "")) {
         throw new ApiError(200, "All fields are required.");
@@ -113,7 +113,12 @@ const loginUser = asyncHandler(async function (req, res) {
     //  save refresh token in db
     //  return response after removing password and refresh token with cookie
 
-    const { email, password } = req.body;
+    const { email, password, googleSignUp } = req.body;
+
+    if((password == "g*0oleU5erpa$swOord" && googleSignUp == false) || (password != "g*0oleU5erpa$swOord" && googleSignUp == true)){
+        throw new ApiError(200, "System Arbitration.");
+    }
+
 
     if (!email || !password)
         throw new ApiError(200, "Email and Password are required");
@@ -123,10 +128,10 @@ const loginUser = asyncHandler(async function (req, res) {
     });
 
     if (!user) throw new ApiError(200, "User doesn't exist");
-
+    console.log(password)
     const passwordExist = await user.isPasswordCorrect(password);
 
-    if (!passwordExist) throw new ApiError(200, "Password doesnt' exist");
+    if (!passwordExist) throw new ApiError(200, "Password doesn't exist");
 
     const { accessToken, refreshToken } =
         await generateAccessTokenAndRefreshToken(user._id);

@@ -128,7 +128,7 @@ const SignUp = () => {
             const res = await api.post("/register", {
                 fullname,
                 email,
-                password: "gooleU5erpa$swOord",
+                password: "g*0oleU5erpa$swOord",
                 googleSignUp: true
             });
             console.log(res.data);
