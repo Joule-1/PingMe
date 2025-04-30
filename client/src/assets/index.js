@@ -16,7 +16,7 @@ import RefreshIcon from "./CalendarIcons/RefreshIcon.svg";
 import HomeIcon from "./UserDashboardIcons/HomeIcon.svg";
 import SettingsIcon from "./UserDashboardIcons/SettingsIcon.svg";
 import ChatIcon from "./UserDashboardIcons/ChatIcon.svg";
-import ActivityIcon from "./UserDashboardIcons/ActivityIcon.svg";
+import ScheduleIcon from "./UserDashboardIcons/ScheduleIcon.svg";
 import UserAvatarDefaultIcon from "./UserDashboardIcons/UserAvatarDefaultIcon.png";
 import SearchIcon from "./UserDashboardIcons/SearchIcon.png";
 import ThemeToggle_Dark from "./ThemeChangeIcons/ThemeToggle_Dark.png";
@@ -55,7 +55,7 @@ export {
     HomeIcon,
     SettingsIcon,
     ChatIcon,
-    ActivityIcon,
+    ScheduleIcon,
     UserAvatarDefaultIcon,
     SearchIcon,
     ThemeToggle_Light,

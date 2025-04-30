@@ -3,7 +3,7 @@ import {
     Logo,
     HomeIcon,
     CalendarIcon,
-    ActivityIcon,
+    ScheduleIcon,
     ChatIcon,
     SettingsIcon,
     ThemeToggle_Light,
@@ -45,12 +45,12 @@ const UserNavbar = () => {
                 <div className="flex cursor-pointer hover:text-[#4b82ff]">
                     <span className="my-auto">
                         <img
-                            src={ActivityIcon}
+                            src={ScheduleIcon}
                             className="w-5 fill-current hover:text-[#4b82ff]"
                         />
                     </span>
                     &nbsp;
-                    <span className="my-auto">Activity</span>
+                    <span className="my-auto">Schedules</span>
                 </div>
                 <div className="flex cursor-pointer hover:text-[#4b82ff]">
                     <span className="my-auto">
@@ -63,14 +63,14 @@ const UserNavbar = () => {
                     <span className="my-auto">Messages</span>
                 </div>
                 <div className="flex cursor-pointer hover:text-[#4b82ff]">
-                    <span className="my-auto">
+                    {/* <span className="my-auto">
                         <img
                             src={SettingsIcon}
                             className="w-5 fill-current hover:text-[#4b82ff]"
                         />
                     </span>
                     &nbsp;
-                    <span className="my-auto">Settings</span>
+                    <span className="my-auto">Settings</span> */}
                 </div>
             </div>
             <div className="flex h-13 w-[25%] place-content-evenly items-center rounded-full bg-white">
