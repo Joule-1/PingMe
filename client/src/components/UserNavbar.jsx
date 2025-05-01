@@ -11,8 +11,12 @@ import {
     UserAvatarDefaultIcon,
     SearchIcon,
 } from "../assets";
+import { Link } from "react-router-dom";
+import { UserContext } from "../utils/UserProvider";
+import { useContext } from "react";
 
 const UserNavbar = () => {
+    const { userIdGlobal, setUserIdGlobal } = useContext(UserContext);
     return (
         <section className="flex place-content-evenly items-center bg-gray-200 pt-3 text-sm">
             <div className="flex h-13 items-center rounded-full bg-white px-4">
@@ -42,7 +46,10 @@ const UserNavbar = () => {
                     &nbsp;
                     <span className="my-auto">Calendar</span>
                 </div>
-                <div className="flex cursor-pointer hover:text-[#4b82ff]">
+                <Link
+                    className="flex cursor-pointer hover:text-[#4b82ff]"
+                    to={`/dashboard/schedules/${userIdGlobal}`}
+                >
                     <span className="my-auto">
                         <img
                             src={ScheduleIcon}
@@ -51,7 +58,8 @@ const UserNavbar = () => {
                     </span>
                     &nbsp;
                     <span className="my-auto">Schedules</span>
-                </div>
+                </Link>
+
                 <div className="flex cursor-pointer hover:text-[#4b82ff]">
                     <span className="my-auto">
                         <img

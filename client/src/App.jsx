@@ -8,6 +8,7 @@ import Privacy from "./components/Privacy.jsx";
 import TermsOfService from "./components/TermsOfService.jsx";
 import UserDashboard from "./components/UserDashboard.jsx";
 import NotFound from "./components/NotFound.jsx";
+import UserSchedules from "./components/UserSchedules.jsx";
 
 function App() {
     return (
@@ -24,6 +25,10 @@ function App() {
                     <Route
                         path="/dashboard/:userid"
                         element={<UserDashboard />}
+                    ></Route>
+                    <Route
+                        path="/dashboard/schedules/:userid"
+                        element={<UserSchedules />}
                     ></Route>
                     <Route path="*" element={<NotFound />}></Route>
                 </Routes>

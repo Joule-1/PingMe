@@ -5,10 +5,14 @@ import {
     fetchSchedule,
 } from "../features/ScheduleManipulationSlice";
 import { CloseIcon } from "../assets";
+import { useContext } from "react";
+import { UserContext } from "../utils/UserProvider";
 
-const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
+const AddUserSchedule = ({setIsAddScheduleVisible}) => {
+    const { userIdGlobal, setUserIdGlobal } = useContext(UserContext);
+
     const [formData, setFormData] = useState({
-        userid: userid,
+        userid: userIdGlobal,
         title: "",
         date: "",
         time: "",
@@ -42,7 +46,7 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
             description: "",
         });
 
-        setdisplayAddSchedule("hidden");
+        setIsAddScheduleVisible(false);
     };
 
     return (
@@ -52,7 +56,7 @@ const AddUserSchedule = ({ setdisplayAddSchedule, userid }) => {
                     Initiate Task
                     <hr className="w-[50%] rounded-full border-2 border-[#4b82ff]" />
                 </span>
-                <span onClick={() => setdisplayAddSchedule("hidden")}>
+                <span onClick={() => setIsAddScheduleVisible(false)}>
                     <img
                         src={CloseIcon}
                         className="cursor-pointer rounded-full bg-white p-1"

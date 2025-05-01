@@ -5,14 +5,22 @@ import NotFound from "./NotFound";
 import UserNavbar from "./UserNavbar";
 import Calendar from "../utils/Calendar";
 import UserScheduleList from "./UserScheduleList";
+import { UserContext } from "../utils/UserProvider";
+import { useContext } from "react";
 
 const UserDashboard = () => {
     const { userid } = useParams();
     const [user_name, setUser_Name] = useState();
     const [notFound, setNotFound] = useState();
-
+    const { userIdGlobal, setUserIdGlobal } = useContext(UserContext);
+    
+    console.log("useridParams " + userid)
     useEffect(() => {
-        if (userid) fetchUser();
+        if (userid) {
+            fetchUser();
+            setUserIdGlobal(userid)
+        }       
+
     }, [userid]);
 
     const fetchUser = async () => {
@@ -46,7 +54,7 @@ const UserDashboard = () => {
                 <div className="border bg-white">
                     <div></div>
                     <div className="border">
-                        <Calendar userid={userid} />
+                        <Calendar />
                     </div>
                 </div>
                 <div className="border bg-white">

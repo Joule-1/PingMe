@@ -23,7 +23,7 @@ const Calendar = () => {
     const startDay = startOfMonth.day();
 
     const [isYearChangeVisible, setIsYearChangeVisible] = useState(false);
-    const [isMonthChangeVisible, setIsMonthChangeVisible] = useState(false);
+    const [isMonthChangeVisible, setIsMonthChangeVisible] = useState(true);
     const [newYear, setNewYear] = useState(currentDate.year());
 
     const today = dayjs();
@@ -121,8 +121,8 @@ const Calendar = () => {
                             <div className="flex rounded-xl bg-gray-200 p-1">
                                 <input
                                     type="text"
-                                    maxlength={4}
-                                    minlength={4}
+                                    maxLength={4}
+                                    minLength={4}
                                     className="mx-1 w-13 rounded-xl bg-gray-200"
                                     value={newYear}
                                     autoFocus
