@@ -8,13 +8,15 @@ const UserSchedules = () => {
     const [isAddScheduleVisible, setIsAddScheduleVisible] = useState(false);
     return (
         <section className="h-screen bg-gray-200">
-            <div className={`${isAddScheduleVisible ? 'block' : 'hidden'}`}>
-                <AddUserSchedule setIsAddScheduleVisible={setIsAddScheduleVisible}/>
+            <div className={`${isAddScheduleVisible ? "block" : "hidden"}`}>
+                <AddUserSchedule
+                    setIsAddScheduleVisible={setIsAddScheduleVisible}
+                />
             </div>
             <UserNavbar />
             <div
                 onClick={() => setIsAddScheduleVisible(true)}
-                className="poppins-semibold mx-auto my-10 flex px-5 w-fit cursor-pointer items-center justify-center rounded-3xl border-4 border-[#4b82ff] bg-white text-2xl shadow-lg"
+                className="poppins-semibold mx-auto my-10 flex w-fit cursor-pointer items-center justify-center rounded-3xl border-4 border-[#4b82ff] bg-white px-5 text-2xl shadow-lg"
             >
                 New Schedule&nbsp;&nbsp;
                 <img
@@ -41,8 +43,10 @@ const UserSchedules = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-span-8 border-l-3">schedules</div>
-                <UserScheduleList />
+                <div className="col-span-8 border-l-3">
+                    schedules
+                    <UserScheduleList />
+                </div>
             </div>
         </section>
     );
