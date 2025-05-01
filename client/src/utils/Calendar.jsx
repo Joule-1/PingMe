@@ -23,7 +23,9 @@ const Calendar = () => {
     const startDay = startOfMonth.day();
 
     const [isYearChangeVisible, setIsYearChangeVisible] = useState(false);
+    const [isMonthChangeVisible, setIsMonthChangeVisible] = useState(false);
     const [newYear, setNewYear] = useState(currentDate.year());
+
     const today = dayjs();
 
     const goToPreviousMonth = () => {
@@ -36,6 +38,7 @@ const Calendar = () => {
 
     const handleMonthChange = (month) => {
         setCurrentDate(currentDate.set("month", month));
+        setIsMonthChangeVisible(true);
     };
 
     const handleYearChange = () => {
@@ -78,9 +81,16 @@ const Calendar = () => {
                     <img src={LeftArrowIcon} />
                 </button>
                 <div className="poppins-semibold flex items-center text-xl">
-                    <div className="group relative">
+                    <div
+                        className="cursor-pointer"
+                        onClick={() =>
+                            setIsMonthChangeVisible(!isMonthChangeVisible)
+                        }
+                    >
                         {currentDate.format("MMMM")}
-                        <div className="poppins-regular absolute top-6 -left-8 flex hidden w-45 flex-wrap rounded-xl bg-gray-100 text-sm group-hover:flex">
+                        <div
+                            className={`poppins-regular absolute w-45 flex-wrap rounded-xl bg-gray-100 text-sm ${isMonthChangeVisible ? "hidden" : "flex"}`}
+                        >
                             {[
                                 "Jan",
                                 "Feb",
@@ -113,7 +123,7 @@ const Calendar = () => {
                                     type="text"
                                     maxlength={4}
                                     minlength={4}
-                                    className="w-13 rounded-xl bg-gray-200 mx-1"
+                                    className="mx-1 w-13 rounded-xl bg-gray-200"
                                     value={newYear}
                                     autoFocus
                                     onFocus={(e) => e.target.select()}
