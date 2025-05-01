@@ -21,15 +21,17 @@ const UserScheduleList = () => {
             <section>
                 <h2>User Schedules</h2>
     
-                <ul>
-                    {userSchedules.map((schedule) => (
-                        <li key={schedule.scheduleId} className="border">
+                <div className="grid grid-cols-4">
+                {userSchedules.map((schedule) => (
+                        <div key={schedule.scheduleId} className="border">
                             <strong>{schedule.scheduleTitle}</strong> - 
                             <br />
                             <br />
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
+                    
+                 
             </section>
         );
     }
