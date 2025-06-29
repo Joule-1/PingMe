@@ -1,1 +1,1 @@
-export const DB_NAME = "Planzo";
+export const DB_NAME = "PingMe";
