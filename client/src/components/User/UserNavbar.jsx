@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     LayoutDashboard,
     CalendarCheck,
@@ -12,29 +12,46 @@ import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../assets";
 import api from "../../utils/UserAxios";
 
-const navigate = useNavigate();
+const UserNavbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+    const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useState();
 
-const handleLogOut = async () => {
-    await api.get("/logout");
-    navigate("/");
-};
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const res2 = await api.get("/current-user");
+                setUserInfo(res2.data.data);
+            } catch (error) {
+                console.log("Error fetching user:", error);
+            }
+        };
+        fetchUser();
+    }, []);
 
-const Dashboard = ({ userInfo }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const handleLogOut = async () => {
+        await api.get("/logout");
+        navigate("/");
+    };
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <>
+            {/* Overlay for mobile */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 z-30 bg-opacity-50 md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
             {/* Sidebar */}
-            <aside
-                className={`fixed top-0 left-0 z-30 flex h-full w-64 transform flex-col justify-between bg-white px-4 py-6 shadow-md transition-transform duration-300 md:static ${
-                    isSidebarOpen
-                        ? "translate-x-0"
-                        : "-translate-x-full md:translate-x-0"
+            <div
+                className={`fixed z-40 flex h-screen w-64 flex-col justify-between bg-white px-4 py-6 shadow-md transition-transform duration-300 md:static md:translate-x-0 ${
+                    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
             >
                 <div>
                     <div className="mb-8 flex items-center gap-2">
-                        <img src={Logo} className="w-8 text-blue-600" />
+                        <img src={Logo} className="w-8" />
                         <span className="text-xl font-semibold text-gray-800">
                             PingMe
                         </span>
@@ -72,9 +89,13 @@ const Dashboard = ({ userInfo }) => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 border-t px-3 py-2 pt-4 text-gray-600">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-300 text-sm font-bold text-white">
-                        <img src={userInfo?.avatar} />
+                <div className="flex items-center gap-3 border-t pt-4 px-3 text-gray-600">
+                    <div className="h-9 w-9 rounded-full bg-gray-300 overflow-hidden">
+                        <img
+                            src={userInfo?.avatar}
+                            className="h-full w-full object-cover"
+                            alt="avatar"
+                        />
                     </div>
                     <div className="flex flex-col">
                         <span className="text-sm font-medium">
@@ -91,50 +112,9 @@ const Dashboard = ({ userInfo }) => {
                         <LogOut className="h-5 w-5 cursor-pointer" />
                     </button>
                 </div>
-            </aside>
-
-            {/* Overlay on mobile */}
-            {isSidebarOpen && (
-                <div
-                    className="bg-opacity-30 fixed inset-0 z-20 bg-black md:hidden"
-                    onClick={() => setIsSidebarOpen(false)}
-                ></div>
-            )}
-
-            {/* Main Content */}
-            <main className="w-full flex-1 overflow-y-auto p-6 md:ml-64">
-                {/* Mobile top bar */}
-                <div className="mb-4 flex items-center justify-between md:hidden">
-                    <h1 className="text-xl font-semibold text-gray-800">
-                        Welcome, {userInfo?.name || "User"}!
-                    </h1>
-                    <button
-                        className="text-gray-600 hover:text-gray-800"
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                    >
-                        {isSidebarOpen ? (
-                            <X className="h-6 w-6" />
-                        ) : (
-                            <Menu className="h-6 w-6" />
-                        )}
-                    </button>
-                </div>
-
-                {/* Grid Content */}
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <div className="rounded-xl bg-white p-4 shadow">
-                        Stats or Cards
-                    </div>
-                    <div className="rounded-xl bg-white p-4 shadow">
-                        Recent Activity
-                    </div>
-                    <div className="rounded-xl bg-white p-4 shadow">
-                        Quick Actions
-                    </div>
-                </div>
-            </main>
-        </div>
+            </div>
+        </>
     );
 };
 
-export default Dashboard;
+export default UserNavbar;
