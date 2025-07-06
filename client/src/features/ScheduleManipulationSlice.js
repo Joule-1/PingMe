@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
-import api from "../utils/Axios.js";
+import api from "../utils/UserAxios.js";
 
 const initialState = {
     userSchedules: [

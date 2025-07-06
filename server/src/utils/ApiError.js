@@ -7,5 +7,5 @@ class ApiError extends Error {
     }
 }
 
-export { ApiError };
+export default ApiError;
  

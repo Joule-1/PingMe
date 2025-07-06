@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserNavbar from "./UserNavbar";
-import { AddIcon } from "../assets";
+import { AddIcon } from "../../assets";
 import AddUserSchedule from "./AddUserSchedule";
 import UserScheduleList from "./UserScheduleList";
 

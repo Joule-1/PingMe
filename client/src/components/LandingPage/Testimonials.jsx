@@ -7,7 +7,7 @@ import {
     TestimoniaIcon4,
     TestimoniaIcon5,
     TestimoniaIcon6,
-} from "../assets"
+} from "../../assets"
 
 const Testimonials = () => {
     return (

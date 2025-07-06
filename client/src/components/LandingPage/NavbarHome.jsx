@@ -1,16 +1,16 @@
 import React from "react";
-import { Logo } from "../assets";
+import { Logo } from "../../assets";
 import { Link } from "react-scroll";
 
 const NavbarHome = () => {
     return (
         <section className="fixed z-50 flex h-15 w-full place-content-between items-center bg-white px-5 text-sm shadow-lg md:place-content-evenly">
-            <div className="flex items-center">
+            <a className="flex items-center" href="/home">
                 <div className={`w-10 hover:scale-105`}>
                     <img src={Logo} className="w-full" />
                 </div>
                 <span className="poppins-semibold ml-2 text-xl">PingMe</span>
-            </div>
+            </a>
             <div className="poppins-semibold flex hidden items-center md:block">
                 <span className="mx-5 cursor-pointer hover:text-[#4b82ff] sm:ml-10">
                     <a

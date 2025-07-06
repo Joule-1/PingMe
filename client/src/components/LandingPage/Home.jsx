@@ -11,8 +11,8 @@ import {
     CommentIcon,
     ThemeToggle_Dark,
     BrandIcon,
-} from "../assets";
-import Testimonials from "./Testimonials";
+} from "../../assets";
+import Testimonials from "./Testimonials.jsx";
 import Pricings from "./Pricings";
 import { Link } from "react-scroll";
 

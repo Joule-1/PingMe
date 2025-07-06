@@ -1,8 +1,6 @@
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
-import uploadOnCloudinary from "../utils/cloudinary.js";
-import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
 const generateAccessTokenAndRefreshToken = async function (userId) {
@@ -15,7 +13,7 @@ const generateAccessTokenAndRefreshToken = async function (userId) {
 
         return { accessToken, refreshToken };
     } catch (error) {
-        throw new ApiError(200, "Something went wrong while generating tokens");
+        throw new ApiError(400, "Something went wrong while generating tokens");
     }
 };
 
@@ -23,77 +21,54 @@ const registerUser = asyncHandler(async function (req, res) {
     //  get user details from frontend
     //  validation - not empty
     //  check if user already exists
-    //  check for images if there local path exist
-    //  upload them on cloudinary
-    //  check if image uploaded on cloudinary
     //  create user object
     //  remove password and refresh token field from response
     //  check if user created
     //  return response
 
-    const { fullname, email, password, googleSignUp } = req.body;
+    const { name, email, password, avatar } = req.body;
 
-    if((password == "g*0oleU5erpa$swOord" && googleSignUp == false) || (password != "g*0oleU5erpa$swOord" && googleSignUp == true)){
-        throw new ApiError(200, "System Arbitration.");
-    }   
-
-    if ([fullname, email, password].some((field) => field?.trim() === "")) {
-        throw new ApiError(200, "All fields are required.");
+    if ([name, email, password, avatar].some((field) => field?.trim() === "")) {
+        throw new ApiError(400, "All fields are required.");
     }
 
     const existingUser = await User.findOne({ email });
 
-    if (existingUser) throw new ApiError(200, "User already exists.");
-
-    let userImageLocalPath;
-    if (
-        req.files &&
-        Array.isArray(req.files.userImage) &&
-        req.files.userImage.length > 0
-    )
-        userImageLocalPath = req.files.userImage[0].path;
-
-    const uploadUserImage = await uploadOnCloudinary(userImageLocalPath);
+    if (existingUser) throw new ApiError(400, "User already exists.");
 
     const user = await User({
-        fullname,
+        name,
         email,
-        userImage: uploadUserImage?.url || "",
         password,
-        googleSignUp
+        avatar,
     });
 
-    console.log(user._id);
-
     try {
-        await user.validate();
+        await user.validate(); // errors are caught in a controlled try-catch block
         await user.save();
     } catch (error) {
-        const firstError =
-            error.errors.fullname ||
-            error.errors.email ||
-            error.errors.password ||
-            error.errors.googleSignUp;
+        const firstError = error.errors.avatar || error.errors.email || error.errors.password || error.errors.name;
 
-        throw new ApiError(200, firstError.properties.message);
+        throw new ApiError(400, firstError.properties.message);
     }
 
     const { accessToken, refreshToken } =
         await generateAccessTokenAndRefreshToken(user._id);
 
     const createdUser = await User.findById(user._id).select(
-        "-password -refreshToken"
+        "-password -refreshToken" // password and refresh token is removed before sending to frontend
     );
 
     if (!createdUser)
         throw new ApiError(
-            200,
+            400,
             "Something Went Wrong While Registering The User"
         );
 
     const options = {
         httpOnly: true,
         secure: true,
+        sameSite: "None", // Required for cross-site cookies
     };
 
     return res
@@ -112,29 +87,23 @@ const loginUser = asyncHandler(async function (req, res) {
     //  generate refresh token and generate access token
     //  save refresh token in db
     //  return response after removing password and refresh token with cookie
-
-    const { email, password, googleSignUp } = req.body;
-
-    if((password == "g*0oleU5erpa$swOord" && googleSignUp == false) || (password != "g*0oleU5erpa$swOord" && googleSignUp == true)){
-        throw new ApiError(200, "System Arbitration.");
-    }
-
+    const { email, password } = req.body;
 
     if (!email || !password)
-        throw new ApiError(200, "Email and Password are required");
+        throw new ApiError(400, "Email and Password are required");
 
     const user = await User.findOne({
         email,
     });
 
-    if (!user) throw new ApiError(200, "User doesn't exist");
-    console.log(password)
+    if (!user) throw new ApiError(400, "User doesn't exist");
+
     const passwordExist = await user.isPasswordCorrect(password);
 
-    if (!passwordExist) throw new ApiError(200, "Password doesn't exist");
+    if (!passwordExist) throw new ApiError(400, "Password isn't correct");
 
     const { accessToken, refreshToken } =
-        await generateAccessTokenAndRefreshToken(user._id);
+        await generateAccessTokenAndRefreshToken(user._id); // refreshToken is saved to DB inside this function only
 
     const loggedInUser = await User.findById(user._id).select(
         "-password -refreshToken"
@@ -143,6 +112,7 @@ const loginUser = asyncHandler(async function (req, res) {
     const options = {
         httpOnly: true,
         secure: true,
+        sameSite: "None",
     };
 
     return res
@@ -154,12 +124,10 @@ const loginUser = asyncHandler(async function (req, res) {
                 201,
                 {
                     loggedInUser,
-                    accessToken,
-                    refreshToken,
                 },
                 "User Logged In Successfully"
             )
-        );
+        );      
 });
 
 const logoutUser = asyncHandler(async function (req, res) {
@@ -187,99 +155,17 @@ const logoutUser = asyncHandler(async function (req, res) {
         .json(new ApiResponse(201, {}, "User Logged Out Successfully"));
 });
 
-const refreshAccessToken = asyncHandler(async function (req, res) {
-    const incomingRefreshToken =
-        req.body.refreshToken || req.cookies.refreshToken;
-
-    if (!incomingRefreshToken) throw ApiError(200, "Unauthorized Request");
-
-    try {
-        const decodedToken = jwt.verify(
-            incomingRefreshToken,
-            process.env.REFRESH_TOKEN_SECRET
-        );
-
-        const user = User.findById(decodedToken?._id);
-
-        if (user?.refreshToken !== incomingRefreshToken)
-            throw ApiError(200, "Refresh token is expired or used");
-
-        const { accessToken, newRefreshToken } =
-            await generateAccessTokenAndRefreshToken(user?._id);
-
-        const options = {
-            httpOnly: true,
-            secure: true,
-        };
-
-        return res
-            .status(201)
-            .cookie("accessToken", accessToken, options)
-            .cookie("refreshToken", newRefreshToken, options)
-            .json(
-                new ApiResponse(
-                    201,
-                    {
-                        accessToken,
-                        refreshToken: newRefreshToken,
-                    },
-                    "Access Token Refresh"
-                )
-            );
-    } catch (error) {
-        throw ApiError(200, error?.message || "Invalid Refresh Token");
-    }
-});
-
 const getCurrentUser = asyncHandler(async function (req, res) {
     return res
         .status(201)
         .json(new ApiResponse(201, req.user, "User Fetched Successfully"));
 });
 
-const authenticateUser = asyncHandler(async function (req, res) {
-    const { _id } = req.body;
 
-    if (!_id) {
-        throw new ApiError(200, "User ID not present");
-    }
-
-    const user = await User.findById(_id).select("-password -refreshToken");
-
-    if (!user) throw new ApiError(200, "User doesn't exist");
-
-    return res
-        .status(201)
-        .json(
-            new ApiResponse(201, req.user, "User Authenticated Successfully")
-        );
-});
-
-const changeCurrentPassword = asyncHandler(async function (req, res) {
-    const { oldPassword, newPassword } = req.body;
-
-    const user = await User.findById(req.user?._id);
-
-    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
-
-    if (!isPasswordCorrect) throw new ApiError(200, "Invalid User Password");
-
-    user.password = password;
-    await user.save({
-        validateBeforeSave: false,
-    });
-
-    return res
-        .status(201)
-        .json(new ApiResponse(201, {}, "User Password Updated Successfully"));
-});
 
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken,
     getCurrentUser,
-    authenticateUser,
-    changeCurrentPassword,
 };

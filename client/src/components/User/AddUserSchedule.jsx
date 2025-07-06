@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 import {
     addSchedule,
     fetchSchedule,
-} from "../features/ScheduleManipulationSlice";
-import { CloseIcon } from "../assets";
+} from "../../features/ScheduleManipulationSlice";
+import { CloseIcon } from "../../assets";
 import { useContext } from "react";
-import { UserContext } from "../utils/UserProvider";
+import { UserContext } from "../../utils/UserProvider";
 
 const AddUserSchedule = ({setIsAddScheduleVisible}) => {
     const { userIdGlobal, setUserIdGlobal } = useContext(UserContext);

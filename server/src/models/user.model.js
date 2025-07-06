@@ -5,13 +5,12 @@ import jwt from "jsonwebtoken";
 
 const userSchema = new Schema(
     {
-        fullname: {
+        name: {
             type: String,
-            required: [true, "Full Name is required."],
-            minlength: [3, "Full name must be at least 3 characters long"],
-            maxlength: [100, "Full name cannot exceed 100 characters"],
+            required: true,
+            minlength: [6, "Name must be at least 6 characters long"],
+            maxlength: [254, "Name cannot exceed 254 characters"],
             trim: true,
-            index: true,
         },
         email: {
             type: String,
@@ -24,17 +23,24 @@ const userSchema = new Schema(
             validate: [validator.isEmail, "Invalid Email Format"],
             set: (value) => validator.normalizeEmail(value),
         },
-        userImage: {
-            type: String,
-        },
         password: {
             type: String,
             required: [true, "Password is required"],
             validate: [validator.isStrongPassword, "Invalid Password"],
         },
-        googleSignUp: {
-            type: Boolean,
-            required: [true, "SignUp method is required"]
+        avatar: {
+            type: String,
+            required: [true, "Avatar is required"],
+            trim: true,
+            validate: {
+                validator: (value) => {
+                    return validator.isURL(value, {
+                        protocols: ["http", "https"],
+                        require_protocol: true,
+                    });
+                },
+                message: "Invalid avatar URL",
+            },
         },
         refreshToken: {
             type: String,
@@ -47,7 +53,7 @@ const userSchema = new Schema(
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10); // encrypt password with HS256 algo 10 rounds
     next();
 });
 
@@ -60,7 +66,6 @@ userSchema.methods.generateAccessToken = function () {
         {
             _id: this._id,
             email: this.email,
-            fullname: this.fullname,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {

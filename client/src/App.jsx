@@ -1,14 +1,14 @@
 import "./App.css";
-import Home from "./components/Home";
+import Home from "./components/LandingPage/Home.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "./components/SignIn.jsx";
 import SignUp from "./components/SignUp.jsx";
 import DynamicTitle from "./utils/DynamicTitle.jsx";
-import Privacy from "./components/Privacy.jsx";
-import TermsOfService from "./components/TermsOfService.jsx";
-import UserDashboard from "./components/UserDashboard.jsx";
+import Privacy from "./components/LandingPage/Privacy.jsx";
+import TermsOfService from "./components/LandingPage/TermsOfService.jsx";
+// import UserDashboard from "./components/User/UserDashboard.jsx";
 import NotFound from "./components/NotFound.jsx";
-import UserSchedules from "./components/UserSchedules.jsx";
+// import UserSchedules from "./components/User/UserSchedules.jsx";
 
 function App() {
     return (
@@ -22,14 +22,14 @@ function App() {
                     <Route path="/signup" element={<SignUp />}></Route>
                     <Route path="/privacy" element={<Privacy />}></Route>
                     <Route path="/tos" element={<TermsOfService />}></Route>
-                    <Route
+                    {/* <Route
                         path="/dashboard/:userid"
                         element={<UserDashboard />}
                     ></Route>
                     <Route
                         path="/dashboard/schedules/:userid"
                         element={<UserSchedules />}
-                    ></Route>
+                    ></Route> */}
                     <Route path="*" element={<NotFound />}></Route>
                 </Routes>
             </BrowserRouter>

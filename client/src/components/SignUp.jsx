@@ -1,5 +1,5 @@
-import React, { useState, useRef, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
     Logo,
     MailIcon,
@@ -10,158 +10,249 @@ import {
     ShowPasswordIcon,
     NameIcon,
 } from "../assets";
-import { Link } from "react-router-dom";
-import api from "../utils/Axios.js";
-import validator from "validator";
-import { UserContext } from "../utils/UserProvider.jsx";
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import api from "../utils/UserAxios.js";
 
-const SignUp = () => {
-    // const { userid, setUserId } = useContext(UserContext);
+function SignUp() {
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [selectedAvatar, setSelectedAvatar] = useState("");
+    const [errors, setErrors] = useState({
+        name: "",
+        email: "",
+        password: "",
+        avatar: "",
+    });
     const navigate = useNavigate();
 
-    const nameRef = useRef();
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const buttonRef = useRef();
+    const nameRef = useRef(null);
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
 
-    const [nameError, setNameError] = useState();
-    const [emailError, setEmailError] = useState();
-    const [passwordError, setPasswordError] = useState();
-    const [formValid, setFormValid] = useState(false);
+    const avatarOptions = [
+        // Male Avatars
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/8_hszqlt.png",
+            alt: "Male Avatar 1",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/3_va6uqp.png",
+            alt: "Male Avatar 2",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528457/50_htffed.png",
+            alt: "Male Avatar 3",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/41_jasslu.png",
+            alt: "Male Avatar 4",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/47_slrxow.png",
+            alt: "Male Avatar 5",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528457/10_n8r5x3.png",
+            alt: "Male Avatar 6",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/37_hzik3l.png",
+            alt: "Male Avatar 7",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/25_m0aktb.png",
+            alt: "Male Avatar 8",
+        },
+        // Female Avatars
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528460/99_brsnyz.png",
+            alt: "Female Avatar 1",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528460/64_u0ccja.png",
+            alt: "Female Avatar 2",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528459/79_xmdrno.png",
+            alt: "Female Avatar 3",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/60_eoi5dx.png",
+            alt: "Female Avatar 4",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528459/81_yvgr0y.png",
+            alt: "Female Avatar 5",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528458/56_tclvyg.png",
+            alt: "Female Avatar 6",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528459/71_wgiu5w.png",
+            alt: "Female Avatar 7",
+        },
+        {
+            url: "https://res.cloudinary.com/dhrhfuzb0/image/upload/v1750528459/91_xggt0w.png",
+            alt: "Female Avatar 8",
+        },
+    ];
 
-    const validateName = () => {
-        const name = nameRef.current.value.trim();
-        if (
-            !/^[A-Za-z\s]+$/.test(name) ||
-            name.length < 3 ||
-            name.length > 100
-        ) {
-            setNameError("Must be at least 3 alphabets");
-        } else {
-            setNameError("");
-        }
+    const togglePassword = () => {
+        setShowPassword((prev) => !prev);
     };
 
-    const validateEmail = () => {
-        const email = emailRef.current.value.trim();
-        if (
-            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-            email.length < 6 ||
-            email.length > 254
-        ) {
-            setEmailError("Invalid Email Format");
-        } else {
-            setEmailError("");
-        }
+    const navigateToHomePage = () => {
+        navigate("/");
     };
 
-    const validatePassword = () => {
-        const password = passwordRef.current.value.trim();
-
-        if (
-            !validator.isStrongPassword(password, {
-                minLength: 8,
-                minLowercase: 1,
-                minUppercase: 1,
-                minNumbers: 1,
-                minSymbols: 1,
-            })
-        ) {
-            setPasswordError(
-                "Min 8 Characters: 1 Upper | 1 Lower | 1 Number | 1 Special"
-            );
-        } else {
-            setPasswordError("");
-        }
+    const handleAvatarChange = (avatarUrl) => {
+        setSelectedAvatar(avatarUrl);
+        setErrors((prev) => ({
+            ...prev,
+            avatar: "",
+        }));
     };
 
-    async function handleFormSubmission(event) {
-        event.preventDefault();
+    const validateForm = () => {
+        const newErrors = {
+            name: "",
+            email: "",
+            password: "",
+            avatar: "",
+        };
+        let isValid = true;
 
-        validateName();
-        validateEmail();
-        validatePassword();
+        // Name validation
+        const name = nameRef.current.value;
+        if (!name) {
+            newErrors.name = "Name is required";
+            isValid = false;
+        }
+        if (name.length < 6) {
+            newErrors.name =
+                "Length of name should be greater than 6 characters";
+            isValid = false;
+        }
 
-        if (nameError !== "") {
-            setNameError("Must be at least 3 alphabets");
+        if (name.length > 254) {
+            newErrors.name =
+                "Length of name should be less than 254 characters";
+            isValid = false;
+        }
+
+        // Email validation
+        const email = emailRef.current.value;
+        if (!email) {
+            newErrors.email = "Email is required";
+            isValid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            newErrors.email = "Please enter a valid email address";
+            isValid = false;
+        }
+        if (email.length < 6) {
+            newErrors.email =
+                "Length of email should be greater than 6 characters";
+            isValid = false;
+        }
+
+        if (email.length > 254) {
+            newErrors.email =
+                "Length of email should be less than 254 characters";
+            isValid = false;
+        }
+
+        // Avatar validation
+        if (!selectedAvatar) {
+            newErrors.avatar = "Please select an avatar";
+            isValid = false;
+        }
+
+        // Password validation
+        const password = passwordRef.current.value;
+        if (!password) {
+            newErrors.password = "Password is required";
+            isValid = false;
+        } else if (password.length < 8) {
+            newErrors.password = "Password must be at least 8 characters long";
+            isValid = false;
+        } else if (!/[A-Z]/.test(password)) {
+            newErrors.password =
+                "Password must contain at least one uppercase letter";
+            isValid = false;
+        } else if (!/[a-z]/.test(password)) {
+            newErrors.password =
+                "Password must contain at least one lowercase letter";
+            isValid = false;
+        } else if (!/[0-9]/.test(password)) {
+            newErrors.password = "Password must contain at least one number";
+            isValid = false;
+        } else if (!/[^A-Za-z0-9]/.test(password)) {
+            newErrors.password =
+                "Password must contain at least one special character";
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
             return;
         }
-        if (emailError !== "") {
-            setEmailError("Invalid Email Format");
-            return;
-        }
-        if (passwordError !== "") {
-            setPasswordError(
-                "Min 8 Characters: 1 Upper | 1 Lower | 1 Number | 1 Special"
-            );
-            return;
-        }
+
+        setLoading(true);
+
         try {
+            console.log("Register form submitted");
+            console.log("Name:", nameRef.current.value);
+            console.log("Email:", emailRef.current.value);
+            console.log("Password:", passwordRef.current.value);
+            console.log("Avatar:", selectedAvatar);
+
             const res = await api.post("/register", {
-                fullname: nameRef.current.value,
+                name: nameRef.current.value,
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
-                googleSignUp: false
+                avatar: selectedAvatar,
             });
-            console.log(res.data);
-            if (res.data.success == false) {
-                console.log(res.data.message);
-            } else {
-                console.log("User ID:", res.data.data._id);
-                navigate(`/dashboard/${res.data.data._id}`);
-                nameRef.current.value = "";
-                emailRef.current.value = "";
-                passwordRef.current.value = "";
+
+            console.log(res);
+            console.log(res.data.success);
+
+            if (res.data.success) {
+                const res2 = await api.get("/current-user");
+                console.log(res2);
+                alert("Registration successful. Please login.");
+                navigate("/signin");
             }
         } catch (error) {
-            console.error(
-                "Error:",
-                error.response?.data?.message || error.message
-            );
-        }
-    }
-
-    async function handleGoogleSubmission(fullname, email){
-        try {
-            const res = await api.post("/register", {
-                fullname,
-                email,
-                password: "g*0oleU5erpa$swOord",
-                googleSignUp: true
-            });
-            console.log(res.data);
-            if (res.data.success == false) {
-                console.log(res.data.message);
-            } else {
-                console.log("User ID:", res.data.data._id);
-                navigate(`/dashboard/${res.data.data._id}`);
-                nameRef.current.value = "";
-                emailRef.current.value = "";
-                passwordRef.current.value = "";
+            console.error("Registration error:", error);
+            // Handle API errors (like duplicate email)
+            if (error.response && error.response.data) {
+                setErrors((prev) => ({
+                    ...prev,
+                    email: error.response.data.message || "Registration failed",
+                }));
             }
-        } catch (error) {
-            console.error(
-                "Error:",
-                error.response?.data?.message || error.message
-            );
+        } finally {
+            setLoading(false);
         }
-    }
-
-    const [PasswordVisibility, setPasswordVisibility] = useState("password");
+    };
 
     return (
-        <section className="flex h-screen flex-col items-center">
+        <section>
             <div className="top-0 flex h-15 w-full place-content-between items-center bg-white px-10 shadow-md">
-                <div className="flex items-center">
+                <a className="flex items-center" href="/home">
                     <div className={`w-10 hover:scale-105`}>
                         <img src={Logo} className="w-full" />
                     </div>
                     <span className="poppins-semibold ml-2 text-xl">
                         PingMe
                     </span>
-                </div>
+                </a>
                 <div className="text-xs">
                     <span className="text-gray-500">
                         Already have an account?
@@ -171,180 +262,333 @@ const SignUp = () => {
                     </button>
                 </div>
             </div>
-            <div className="my-auto flex justify-evenly rounded-2xl p-5 shadow-xl">
-                <div className="ml-2">
-                    <div className="poppins-semibold mb-8 text-4xl">
-                        Sign Up
-                    </div>
-                    <div className="poppins-semibold my-4 text-xs">
-                        Sign Up with Open account
-                    </div>
-                    <div className="poppins-semibold mr-2 flex w-80 cursor-pointer items-center justify-center rounded-lg border-1 border-gray-400 px-10 py-2 hover:border-gray-600">
-                        {/* <div className="w-5">
-                            <img src={GoogleIcon} />
-                        </div> */}
-                        <GoogleLogin
-                            onSuccess={(credentialResponse) => {
-                                console.log(credentialResponse);
-                                 console.log(credentialResponse.credential)
-                                const decoded = jwtDecode(credentialResponse.credential);
-                                console.log(decoded.name)
-                                handleGoogleSubmission(decoded.name, decoded.email)                                
-                            }}
-                            onError={() => console.log("Login Failed")}
-                        />
-                        {/* <span>&nbsp;&nbsp;Sign Up With Google</span> */}
-                    </div>
-                    <hr className="my-6 border-1 border-gray-200" />
-                    <div className="poppins-semibold text-xs">
-                        or continue with email address
-                    </div>
-                    <form
-                        className="flex w-full flex-col"
-                        onSubmit={handleFormSubmission}
-                    >
-                        <div>
-                            <div className="mt-4 flex items-center rounded-lg border border-transparent bg-gray-100 text-sm transition-all duration-300 hover:border-[#4b82ff]">
+            <div
+                id="root"
+                className="relative flex min-h-screen items-center justify-center overflow-x-hidden p-4"
+            >
+                <section id="login-form" className="relative w-full max-w-md">
+                    {/* Login Card */}
+                    <div className="relative z-10 rounded-3xl border border-blue-100 bg-white p-8 shadow-lg transition-all duration-500 hover:shadow-xl">
+                        {/* Logo/Brand */}
+                        <div className="mb-4 text-center">
+                            <div
+                                onClick={navigateToHomePage}
+                                className="mx-auto mb-2 h-16 w-16"
+                            >
+                                <img src={Logo} />
+                            </div>
+                            <h1
+                                onClick={navigateToHomePage}
+                                className="font-inter cursor-pointer text-2xl font-bold text-gray-900"
+                            >
+                                PingMe
+                            </h1>
+                            <p className="mt-1 text-sm text-gray-600">
+                                Register for your workspace
+                            </p>
+                        </div>
+
+                        {/* Login Form */}
+                        <form className="space-y-6" onSubmit={handleSubmit}>
+                            {/* Name Input */}
+                            <div className="transition-transform duration-300">
                                 <label
                                     htmlFor="name"
-                                    className="flex h-12 items-center rounded-l-lg"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    <img
-                                        src={NameIcon}
-                                        className="w-8 pr-1 pl-2"
-                                    />
+                                    Name
                                 </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    placeholder="Name"
-                                    className="h-12 w-full pl-2"
-                                    autoComplete="off"
-                                    ref={nameRef}
-                                    onBlur={validateName}
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        autoFocus
+                                        autoComplete="off"
+                                        name="name"
+                                        ref={nameRef}
+                                        className={`w-full border px-4 py-3 text-sm outline-none ${errors.name ? "border-red-500" : "border-gray-200"} rounded-2xl bg-gray-50 transition-all duration-300 focus:border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500`}
+                                        placeholder="Enter your name"
+                                        onChange={() =>
+                                            setErrors((prev) => ({
+                                                ...prev,
+                                                name: "",
+                                            }))
+                                        }
+                                    />
+                                </div>
+                                {errors.name && (
+                                    <p className="mt-1 text-sm text-red-600">
+                                        {errors.name}
+                                    </p>
+                                )}
                             </div>
-                            <span
-                                name="errorText"
-                                className="block pb-2 text-xs text-red-500"
-                            >
-                                &nbsp;{nameError}
-                            </span>
-                        </div>
-                        <div>
-                            <div className="flex items-center rounded-lg border border-transparent bg-gray-100 text-sm transition-all duration-300 hover:border-[#4b82ff]">
+
+                     
+
+                            {/* Avatar Selection */}
+                            <div className="transition-transform duration-300">
+                                <label className="mb-3 block text-sm font-medium text-gray-700">
+                                    Choose Your Avatar
+                                </label>
+                                <div className="grid grid-cols-4 gap-3">
+                                    {avatarOptions.map((avatar) => (
+                                        <div
+                                            key={avatar.url}
+                                            className="relative"
+                                        >
+                                            <input
+                                                type="radio"
+                                                name="avatar"
+                                                value={avatar.url}
+                                                id={`avatar-${avatar.url}`}
+                                                checked={
+                                                    selectedAvatar ===
+                                                    avatar.url
+                                                }
+                                                onChange={() =>
+                                                    handleAvatarChange(
+                                                        avatar.url
+                                                    )
+                                                }
+                                                className="sr-only"
+                                            />
+                                            <label
+                                                htmlFor={`avatar-${avatar.url}`}
+                                                className="block cursor-pointer"
+                                            >
+                                                <img
+                                                    src={avatar.url}
+                                                    alt={avatar.alt}
+                                                    className={`h-12 w-12 rounded-full border-2 transition-colors ${
+                                                        selectedAvatar ===
+                                                        avatar.url
+                                                            ? "border-blue-500"
+                                                            : "border-gray-200 hover:border-blue-300"
+                                                    }`}
+                                                />
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                                {errors.avatar && (
+                                    <p className="mt-1 text-sm text-red-600">
+                                        {errors.avatar}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Email Input */}
+                            <div className="transition-transform duration-300">
                                 <label
                                     htmlFor="email"
-                                    className="flex h-12 items-center rounded-l-lg"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    <img
-                                        src={MailIcon}
-                                        className="w-8 pr-1 pl-2"
-                                    />
+                                    Email Address
                                 </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    placeholder="Email"
-                                    className="h-12 w-full pl-2"
-                                    ref={emailRef}
-                                    onBlur={validateEmail}
-                                    autoComplete="off"
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        autoComplete="off"
+                                        name="email"
+                                        ref={emailRef}
+                                        className={`w-full border px-4 py-3 text-sm outline-none ${errors.email ? "border-red-500" : "border-gray-200"} rounded-2xl bg-gray-50 transition-all duration-300 focus:border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500`}
+                                        placeholder="Enter your email"
+                                        onChange={() =>
+                                            setErrors((prev) => ({
+                                                ...prev,
+                                                email: "",
+                                            }))
+                                        }
+                                    />
+                                    <svg
+                                        className="absolute top-3.5 right-3 h-5 w-5 text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                                        />
+                                    </svg>
+                                </div>
+                                {errors.email && (
+                                    <p className="mt-1 text-sm text-red-600">
+                                        {errors.email}
+                                    </p>
+                                )}
                             </div>
-                            <span
-                                name="errorText"
-                                className="block pb-2 text-xs text-red-500"
-                            >
-                                &nbsp;{emailError}
-                            </span>
-                        </div>
-                        <div>
-                            <div className="flex items-center rounded-lg border border-transparent bg-gray-100 text-sm transition-all duration-300 hover:border-[#4b82ff]">
+
+                            {/* Password Input */}
+                            <div className="transition-transform duration-300">
                                 <label
                                     htmlFor="password"
-                                    className="flex h-12 items-center rounded-l-lg"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    <img
-                                        src={PasswordIcon}
-                                        className="w-9 pr-1 pl-2"
-                                    />
+                                    Password
                                 </label>
-                                <input
-                                    type={PasswordVisibility}
-                                    id="password"
-                                    placeholder="Password"
-                                    className="h-12 w-full pl-2"
-                                    ref={passwordRef}
-                                    onBlur={validatePassword}
-                                    autoComplete="off"
-                                />
-                                <span
-                                    className="flex h-12 items-center rounded-r-lg"
-                                    onClick={() =>
-                                        setPasswordVisibility(
-                                            PasswordVisibility === "password"
-                                                ? "text"
-                                                : "password"
-                                        )
-                                    }
-                                >
-                                    <img
-                                        src={
-                                            PasswordVisibility === "password"
-                                                ? HidePasswordIcon
-                                                : ShowPasswordIcon
+                                <div className="relative">
+                                    <input
+                                        type={
+                                            showPassword ? "text" : "password"
                                         }
-                                        className="mr-2 w-4 cursor-pointer"
+                                        id="password"
+                                        name="password"
+                                        ref={passwordRef}
+                                        className={`w-full border px-4 py-3 text-sm outline-none ${errors.password ? "border-red-500" : "border-gray-200"} rounded-2xl bg-gray-50 pr-12 transition-all duration-300 focus:border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500`}
+                                        placeholder="Enter your password"
+                                        onChange={() =>
+                                            setErrors((prev) => ({
+                                                ...prev,
+                                                password: "",
+                                            }))
+                                        }
                                     />
-                                </span>
+                                    <button
+                                        type="button"
+                                        className="absolute top-3.5 right-3 text-gray-400 hover:text-gray-600"
+                                        onClick={togglePassword}
+                                    >
+                                        {showPassword ? (
+                                            <svg
+                                                className="h-5 w-5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            <svg
+                                                className="h-5 w-5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                                />
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                                />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+                                {errors.password && (
+                                    <p className="mt-1 text-sm text-red-600">
+                                        {errors.password}
+                                    </p>
+                                )}
+                                <div className="mt-2 text-xs text-gray-500">
+                                    Password must contain:
+                                    <ul className="list-inside list-disc">
+                                        <li
+                                            className={
+                                                passwordRef.current?.value
+                                                    ?.length >= 8
+                                                    ? "text-green-500"
+                                                    : ""
+                                            }
+                                        >
+                                            At least 8 characters
+                                        </li>
+                                        <li
+                                            className={
+                                                /[A-Z]/.test(
+                                                    passwordRef.current
+                                                        ?.value || ""
+                                                )
+                                                    ? "text-green-500"
+                                                    : ""
+                                            }
+                                        >
+                                            One uppercase letter
+                                        </li>
+                                        <li
+                                            className={
+                                                /[a-z]/.test(
+                                                    passwordRef.current
+                                                        ?.value || ""
+                                                )
+                                                    ? "text-green-500"
+                                                    : ""
+                                            }
+                                        >
+                                            One lowercase letter
+                                        </li>
+                                        <li
+                                            className={
+                                                /[0-9]/.test(
+                                                    passwordRef.current
+                                                        ?.value || ""
+                                                )
+                                                    ? "text-green-500"
+                                                    : ""
+                                            }
+                                        >
+                                            One number
+                                        </li>
+                                        <li
+                                            className={
+                                                /[^A-Za-z0-9]/.test(
+                                                    passwordRef.current
+                                                        ?.value || ""
+                                                )
+                                                    ? "text-green-500"
+                                                    : ""
+                                            }
+                                        >
+                                            One special character
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                            <span
-                                name="errorText"
-                                className="block pb-2 text-xs text-red-500"
+
+                            {/* Submit Button */}
+                            <button
+                                type="submit"
+                                className="w-full transform rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3 font-medium text-white transition-all duration-300 hover:scale-101 hover:from-blue-600 hover:to-blue-700 focus:ring-4 focus:ring-blue-200 active:scale-95"
+                                disabled={loading}
                             >
-                                &nbsp;{passwordError}
-                            </span>
+                                {loading
+                                    ? "Creating account..."
+                                    : "Create Account"}
+                            </button>
+                        </form>
+
+                        {/* Register Link */}
+                        <div className="mt-8 border-t border-gray-100 pt-6 text-center">
+                            <p className="text-sm text-gray-600">
+                                Already Registered?
+                                <a
+                                    href="/login"
+                                    className="font-medium text-blue-600 transition-colors duration-200 hover:text-blue-700"
+                                >
+                                    {" "}
+                                    Login
+                                </a>
+                            </p>
                         </div>
-                        <div className="poppins-light text-xs text-gray-500">
-                            By signing up, you agree to our{" "}
-                            <Link
-                                to="/tos"
-                                target="_blank"
-                                className="underline hover:text-gray-900"
-                            >
-                                Terms of Service
-                            </Link>{" "}
-                            and <br />
-                            <Link
-                                to="/privacy"
-                                target="_blank"
-                                className="underline hover:text-gray-900"
-                            >
-                                Privacy Policy.
-                            </Link>
-                        </div>
-                        <button
-                            type="submit"
-                            // disabled={!formValid} ${formValid ? "cursor-pointer" : "cursor-not-allowed"}
-                            className={`poppins-semibold my-4 flex cursor-pointer items-center justify-center rounded-2xl border-2 border-transparent bg-[#4b82ff] px-2 py-2 text-sm text-white transition-all duration-400 hover:border-[#4b82ff] hover:bg-white hover:text-[#4b82ff]`}
-                            ref={buttonRef}
-                        >
-                            Get Started
-                        </button>
-                        <div className="mx-auto text-xs">
-                            <span className="text-gray-500">
-                                Already have an account?
-                            </span>
-                            <span className="poppins-semibold ml-2 cursor-pointer rounded-xl text-[#4b82ff] hover:underline">
-                                <Link to="/signin">Sign In</Link>
-                            </span>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </section>
             </div>
         </section>
     );
-};
+}
 
 export default SignUp;

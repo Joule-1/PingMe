@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import api from "../utils/Axios";
-import NotFound from "./NotFound";
-import UserNavbar from "./UserNavbar";
-import Calendar from "../utils/Calendar";
-import UserScheduleList from "./UserScheduleList";
-import { UserContext } from "../utils/UserProvider";
+import api from "../../utils/UserAxios";
+import NotFound from "../NotFound";
+import UserNavbar from "../UserNavbar";
+import Calendar from "../../utils/Calendar";
+import UserScheduleList from "../UserScheduleList";
+import { UserContext } from "../../utils/UserProvider";
 import { useContext } from "react";
 
 const UserDashboard = () => {
