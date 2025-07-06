@@ -8,7 +8,7 @@ const UserSchedules = () => {
     const [isAddScheduleVisible, setIsAddScheduleVisible] = useState(false);
     return (
         <section className="h-screen bg-gray-200">
-            <div className={`${isAddScheduleVisible ? "block" : "hidden"}`}>
+            {/* <div className={`${isAddScheduleVisible ? "block" : "hidden"}`}>
                 <AddUserSchedule
                     setIsAddScheduleVisible={setIsAddScheduleVisible}
                 />
@@ -47,7 +47,7 @@ const UserSchedules = () => {
                     schedules
                     <UserScheduleList />
                 </div>
-            </div>
+            </div> */}
         </section>
     );
 };

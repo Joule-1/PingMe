@@ -1,39 +1,37 @@
 import "./App.css";
-import Home from "./components/LandingPage/Home.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./components/LandingPage/Home.jsx";
 import SignIn from "./components/SignIn.jsx";
 import SignUp from "./components/SignUp.jsx";
-import DynamicTitle from "./utils/DynamicTitle.jsx";
 import Privacy from "./components/LandingPage/Privacy.jsx";
 import TermsOfService from "./components/LandingPage/TermsOfService.jsx";
-// import UserDashboard from "./components/User/UserDashboard.jsx";
+import UserDashboard from "./components/User/UserDashboard.jsx";
 import NotFound from "./components/NotFound.jsx";
-// import UserSchedules from "./components/User/UserSchedules.jsx";
+import DynamicTitle from "./utils/DynamicTitle.jsx";
+
+const AppWrapper = () => {
+    return (
+        <>
+            <DynamicTitle />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/tos" element={<TermsOfService />} />
+                <Route path="/dashboard" element={<UserDashboard />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </>
+    );
+};
 
 function App() {
     return (
-        <>
-            <BrowserRouter> 
-                <DynamicTitle />
-                <Routes>
-                    <Route path="/" element={<Home />}></Route>
-                    <Route path="/home" element={<Home />}></Route>
-                    <Route path="/signin" element={<SignIn />}></Route>
-                    <Route path="/signup" element={<SignUp />}></Route>
-                    <Route path="/privacy" element={<Privacy />}></Route>
-                    <Route path="/tos" element={<TermsOfService />}></Route>
-                    {/* <Route
-                        path="/dashboard/:userid"
-                        element={<UserDashboard />}
-                    ></Route>
-                    <Route
-                        path="/dashboard/schedules/:userid"
-                        element={<UserSchedules />}
-                    ></Route> */}
-                    <Route path="*" element={<NotFound />}></Route>
-                </Routes>
-            </BrowserRouter>
-        </>
+        <BrowserRouter>
+            <AppWrapper />
+        </BrowserRouter>
     );
 }
 

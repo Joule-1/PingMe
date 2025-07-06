@@ -5,11 +5,8 @@ import {
     fetchSchedule,
 } from "../../features/ScheduleManipulationSlice";
 import { CloseIcon } from "../../assets";
-import { useContext } from "react";
-import { UserContext } from "../../utils/UserProvider";
 
 const AddUserSchedule = ({setIsAddScheduleVisible}) => {
-    const { userIdGlobal, setUserIdGlobal } = useContext(UserContext);
 
     const [formData, setFormData] = useState({
         userid: userIdGlobal,
@@ -51,7 +48,8 @@ const AddUserSchedule = ({setIsAddScheduleVisible}) => {
 
     return (
         <section className="absolute top-4 mx-[25%] w-[50%] rounded-2xl bg-gray-200 p-5 shadow-xl">
-            <div className="flex items-center justify-between">
+            HI2
+            {/* <div className="flex items-center justify-between">
                 <span className="poppins-semibold text-xl">
                     Initiate Task
                     <hr className="w-[50%] rounded-full border-2 border-[#4b82ff]" />
@@ -129,7 +127,7 @@ const AddUserSchedule = ({setIsAddScheduleVisible}) => {
                 >
                     Done
                 </button>
-            </form>
+            </form> */}
         </section>
     );
 };

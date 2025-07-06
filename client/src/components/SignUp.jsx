@@ -2,13 +2,6 @@ import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
     Logo,
-    MailIcon,
-    PasswordIcon,
-    GoogleIcon,
-    AppleIcon,
-    HidePasswordIcon,
-    ShowPasswordIcon,
-    NameIcon,
 } from "../assets";
 import api from "../utils/UserAxios.js";
 
@@ -225,8 +218,7 @@ function SignUp() {
             if (res.data.success) {
                 const res2 = await api.get("/current-user");
                 console.log(res2);
-                alert("Registration successful. Please login.");
-                navigate("/signin");
+                navigate("/dashboard");
             }
         } catch (error) {
             console.error("Registration error:", error);
@@ -322,8 +314,6 @@ function SignUp() {
                                     </p>
                                 )}
                             </div>
-
-                     
 
                             {/* Avatar Selection */}
                             <div className="transition-transform duration-300">

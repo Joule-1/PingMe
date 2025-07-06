@@ -2,16 +2,8 @@ import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
     Logo,
-    MailIcon,
-    PasswordIcon,
-    GoogleIcon,
-    AppleIcon,
-    HidePasswordIcon,
-    ShowPasswordIcon,
-    NameIcon,
 } from "../assets";
 import api from "../utils/UserAxios.js";
-
 
 function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
@@ -79,12 +71,9 @@ function SignIn() {
             });
 
             if (res.data.success) {
-                localStorage.setItem(
-                    "loggedInUser",
-                    JSON.stringify(res.data.data.loggedInUser)
-                );
-                window.dispatchEvent(new Event("storage"));
-                navigate(`/dashboard`);
+                const res2 = await api.get("/current-user");
+                console.log(res2);
+                navigate("/dashboard");
             } else {
                 setError(res.data.message || "Login failed. Please try again.");
             }

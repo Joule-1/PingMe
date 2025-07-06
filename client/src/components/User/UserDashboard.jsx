@@ -1,67 +1,183 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+// import React, { useEffect, useState } from "react";
+// import { useParams } from "react-router";
+// import api from "../../utils/UserAxios";
+// import NotFound from "../NotFound";
+// import UserNavbar from "./UserNavbar.jsx";
+// import Calendar from "../../utils/Calendar.jsx";
+// import UserScheduleList from "./UserScheduleList";
+
+
+//     return (
+//         <section className="h-screen bg-gray-200">
+//             <UserNavbar userInfo={userInfo}/>
+//             {/* <div className="grid grid-cols-2 gap-5 px-4">
+//                 <div className="border bg-white">
+//                     <div></div>
+//                     <div className="border">
+//                         <Calendar />
+//                     </div>
+//                 </div>
+//                 <div className="border bg-white">
+//                     <UserScheduleList />
+//                 </div>
+//             </div> */}
+//         </section>
+//     );
+// };
+
+// export default UserDashboard;
+
+import React, { useState, useEffect } from "react";
+import {
+    LayoutDashboard,
+    CalendarCheck,
+    MessageCircle,
+    Settings,
+    LogOut,
+    Menu,
+    X,
+} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Logo } from "../../assets";
 import api from "../../utils/UserAxios";
-import NotFound from "../NotFound";
-import UserNavbar from "../UserNavbar";
-import Calendar from "../../utils/Calendar";
-import UserScheduleList from "../UserScheduleList";
-import { UserContext } from "../../utils/UserProvider";
-import { useContext } from "react";
 
 const UserDashboard = () => {
-    const { userid } = useParams();
-    const [user_name, setUser_Name] = useState();
-    const [notFound, setNotFound] = useState();
-    const { userIdGlobal, setUserIdGlobal } = useContext(UserContext);
-    
-    console.log("useridParams " + userid)
+    const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useState();
+
     useEffect(() => {
-        if (userid) {
-            fetchUser();
-            setUserIdGlobal(userid)
-        }       
-
-    }, [userid]);
-
-    const fetchUser = async () => {
-        try {
-            const res = await api.post(
-                "/authenticate-user",
-                {
-                    _id: userid,
-                },
-                { withCredentials: true }
-            );
-
-            if (res.data.success == true) {
-                
-                setUser_Name(res.data.data.fullname);
-                setNotFound(false);
-            } else {
-                setNotFound(true);
+        const fetchUser = async () => {
+            try {
+                const res2 = await api.get("/current-user");
+                console.log(res2.data.data);
+                setUserInfo(res2.data.data);
+            } catch (error) {
+                console.log("HI");
+                console.log(error);
             }
-        } catch (error) {
-            setNotFound(true);
-        }
+        };
+        fetchUser();
+    }, []);
+
+    const handleLogOut = async () => {
+        await api.get("/logout");
+        navigate("/");
     };
 
-    if (notFound) return <NotFound />;
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-        <section className="h-screen bg-gray-200">
-            <UserNavbar />
-            <div className="grid grid-cols-2 gap-5 px-4">
-                <div className="border bg-white">
-                    <div></div>
-                    <div className="border">
-                        <Calendar />
+        <div className="flex h-screen bg-gray-100">
+            {/* Sidebar */}
+            <div
+                className={`fixed top-0 left-0 z-30 flex h-full w-64 transform flex-col justify-between bg-white px-4 py-6 shadow-md transition-transform duration-300 md:static ${
+                    isSidebarOpen
+                        ? "translate-x-0"
+                        : "-translate-x-full md:translate-x-0"
+                }`}
+            >
+                <div>
+                    <div className="mb-8 flex items-center gap-2">
+                        <img src={Logo} className="w-8 text-blue-600" />
+                        <span className="text-xl font-semibold text-gray-800">
+                            PingMe
+                        </span>
+                    </div>
+
+                    <div className="flex flex-col gap-4 text-gray-700">
+                        <Link
+                            to="/dashboard"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
+                        >
+                            <LayoutDashboard className="h-5 w-5" />
+                            Dashboard
+                        </Link>
+                        <Link
+                            to="/calendar"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
+                        >
+                            <CalendarCheck className="h-5 w-5" />
+                            Calendar
+                        </Link>
+                        <Link
+                            to="/messages"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
+                        >
+                            <MessageCircle className="h-5 w-5" />
+                            Messages
+                        </Link>
+                        <Link
+                            to="/settings"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
+                        >
+                            <Settings className="h-5 w-5" />
+                            Settings
+                        </Link>
                     </div>
                 </div>
-                <div className="border bg-white">
-                    <UserScheduleList />
+
+                <div className="flex items-center gap-3 border-t px-3 py-2 pt-4 text-gray-600">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-300 text-sm font-bold text-white">
+                        <img src={userInfo?.avatar} />
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                            {userInfo?.name}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                            {userInfo?.email}
+                        </span>
+                    </div>
+                    <button
+                        className="ml-auto text-red-500 hover:text-red-600"
+                        onClick={handleLogOut}
+                    >
+                        <LogOut className="h-5 w-5 cursor-pointer" />
+                    </button>
                 </div>
             </div>
-        </section>
+
+            {/* Overlay on mobile */}
+            {isSidebarOpen && (
+                <div
+                    className="bg-opacity-30 fixed inset-0 z-20 bg-black md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                ></div>
+            )}
+
+            {/* Main Content */}
+            <main className="w-full flex-1 overflow-y-auto p-6 md:ml-64">
+                {/* Mobile top bar */}
+                <div className="mb-4 flex items-center justify-between md:hidden">
+                    <h1 className="text-xl font-semibold text-gray-800">
+                        Welcome, {userInfo?.name || "User"}!
+                    </h1>
+                    <button
+                        className="text-gray-600 hover:text-gray-800"
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                        {isSidebarOpen ? (
+                            <X className="h-6 w-6" />
+                        ) : (
+                            <Menu className="h-6 w-6" />
+                        )}
+                    </button>
+                </div>
+
+                {/* Grid Content */}
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="rounded-xl bg-white p-4 shadow">
+                        Stats or Cards
+                    </div>
+                    <div className="rounded-xl bg-white p-4 shadow">
+                        Recent Activity
+                    </div>
+                    <div className="rounded-xl bg-white p-4 shadow">
+                        Quick Actions
+                    </div>
+                </div>
+            </main>
+        </div>
     );
 };
 

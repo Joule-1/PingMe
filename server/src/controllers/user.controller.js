@@ -161,11 +161,28 @@ const getCurrentUser = asyncHandler(async function (req, res) {
         .json(new ApiResponse(201, req.user, "User Fetched Successfully"));
 });
 
+const authenticateUser = asyncHandler(async function (req, res) {
+    const { _id } = req.body;
 
+    if (!_id) {
+        throw new ApiError(200, "User ID not present");
+    }
+
+    const user = await User.findById(_id).select("-password -refreshToken");
+
+    if (!user) throw new ApiError(200, "User doesn't exist");
+
+    return res
+        .status(201)
+        .json(
+            new ApiResponse(201, req.user, "User Authenticated Successfully")
+        );
+});
 
 export {
     registerUser,
     loginUser,
     logoutUser,
     getCurrentUser,
+    authenticateUser,
 };

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     addSchedule,
     fetchSchedule,
-} from "../features/ScheduleManipulationSlice";
+} from "../../features/ScheduleManipulationSlice";
 
 const UserScheduleList = () => {
 
