@@ -129,3 +129,11 @@
         font-size: xx-small;
     }
 }
+
+.react-calendar__tile.bg-blue-100 {
+  background-color: #dbeafe !important;
+}
+.react-calendar__tile--active {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}

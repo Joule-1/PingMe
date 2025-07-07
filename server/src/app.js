@@ -28,8 +28,13 @@ app.use(
 );
 
 import userRouter from "./routes/user.routes.js";
+import userTaskRouter from "./routes/userTask.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/userTask", userTaskRouter);
+app.use("/api/v1/userDashboard", dashboardRoutes);
+
 
 app.use(errorHandler);
 
