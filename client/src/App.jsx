@@ -8,6 +8,7 @@ import TermsOfService from "./components/LandingPage/TermsOfService.jsx";
 import UserDashboard from "./components/User/UserDashboard.jsx";
 import NotFound from "./components/NotFound.jsx";
 import DynamicTitle from "./utils/DynamicTitle.jsx";
+import UserTask from "./components/User/UserTask.jsx";
 
 const AppWrapper = () => {
     return (
@@ -21,6 +22,7 @@ const AppWrapper = () => {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/tos" element={<TermsOfService />} />
                 <Route path="/dashboard" element={<UserDashboard />} />
+                <Route path="/tasks" element={<UserTask />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </>

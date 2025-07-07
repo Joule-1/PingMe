@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ScheduleManipulationReducer from "../features/ScheduleManipulationSlice.js";
+import taskReducer from "../features/TaskSlice.js";
 
 const store = configureStore({
-    reducer: {
-        userSchedule: ScheduleManipulationReducer
-    }
-})
+  reducer: {
+    tasks: taskReducer,
+  },
+});
 
 export default store;

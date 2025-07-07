@@ -7,6 +7,7 @@ import {
     LogOut,
     Menu,
     X,
+    BringToFront,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../assets";
@@ -66,25 +67,11 @@ const UserNavbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                             Dashboard
                         </Link>
                         <Link
-                            to="/calendar"
+                            to="/tasks"
                             className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
                         >
-                            <CalendarCheck className="h-5 w-5" />
-                            Calendar
-                        </Link>
-                        <Link
-                            to="/messages"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
-                        >
-                            <MessageCircle className="h-5 w-5" />
-                            Messages
-                        </Link>
-                        <Link
-                            to="/settings"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
-                        >
-                            <Settings className="h-5 w-5" />
-                            Settings
+                            <BringToFront className="h-5 w-5"/>
+                            Task
                         </Link>
                     </div>
                 </div>

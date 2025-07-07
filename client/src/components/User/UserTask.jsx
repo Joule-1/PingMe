@@ -1,0 +1,495 @@
+import React, { useState } from "react";
+import UserNavbar from "./UserNavbar";
+import { Menu } from "lucide-react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTasks } from "../../features/TaskSlice.js";
+import { deleteTask } from "../../features/TaskSlice";
+import { toggleStatus } from "../../features/TaskSlice";
+import { createTask } from "../../features/TaskSlice";
+
+const UserTask = () => {
+    const dispatch = useDispatch();
+    const taskState = useSelector((state) => state.tasks);
+    const tasks = Array.isArray(taskState.tasks) ? taskState.tasks : [];
+    const loading = taskState.loading;
+    const error = taskState.error;
+
+    useEffect(() => {
+        dispatch(fetchTasks());
+    }, [dispatch]);
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        priority: "low",
+        dueDate: "",
+    });
+
+    return (
+        <div className="flex h-screen overflow-hidden bg-gray-100">
+            <UserNavbar
+                isSidebarOpen={isSidebarOpen}
+                setIsSidebarOpen={setIsSidebarOpen}
+            />
+            {/* Main Content */}
+            <div className="ml-0 flex flex-1 flex-col overflow-hidden">
+                {/* Mobile Menu Button */}
+                <div className="p-4 md:hidden">
+                    <button
+                        onClick={() => setIsSidebarOpen(true)}
+                        className="text-gray-700 hover:text-gray-900"
+                    >
+                        <Menu className="h-6 w-6" />
+                    </button>
+                </div>
+
+                {/* Scrollable Content */}
+                <div className="w-full flex-1 overflow-y-auto p-6">
+                    {/* Replace this with your actual dashboard section */}
+                    <section id="tasks" className="px-4 py-12 sm:px-6 lg:px-8">
+                        <div className="mx-auto max-w-7xl">
+                            <div className="mb-12 text-center">
+                                <h2 className="mb-4 text-3xl font-bold text-gray-900">
+                                    Tasks
+                                </h2>
+                                <p className="mx-auto max-w-2xl text-lg text-gray-600">
+                                    Manage your tasks efficiently with priority
+                                    levels, deadlines, and real-time
+                                    collaboration features.
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                                <div className="lg:col-span-2">
+                                    <div className="mb-6">
+                                        <button
+                                            onClick={() => setShowModal(true)}
+                                            className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700"
+                                        >
+                                            Add New Task
+                                        </button>
+                                    </div>
+
+                                    <div className="mb-6 flex flex-wrap gap-2">
+                                        <button className="filter-btn active rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-300">
+                                            All Tasks
+                                        </button>
+                                        <button className="filter-btn rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-300">
+                                            High Priority
+                                        </button>
+                                        <button className="filter-btn rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-300">
+                                            Medium Priority
+                                        </button>
+                                        <button className="filter-btn rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-300">
+                                            Low Priority
+                                        </button>
+                                        <button className="filter-btn rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-300">
+                                            Completed
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-4" id="taskList">
+                                        <div
+                                            className="space-y-4"
+                                            id="taskList"
+                                        >
+                                            {loading && (
+                                                <p className="text-blue-500">
+                                                    Loading tasks...
+                                                </p>
+                                            )}
+                                            {error && (
+                                                <p className="text-red-500">
+                                                    {error}
+                                                </p>
+                                            )}
+                                            {!loading && tasks.length === 0 && (
+                                                <p className="text-gray-500">
+                                                    No tasks available.
+                                                </p>
+                                            )}
+                                            {!loading &&
+                                                (tasks || []).map((task) => (
+                                                    <div
+                                                        key={task.id}
+                                                        className={`task-item rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md ${
+                                                            task.status ===
+                                                            "done"
+                                                                ? "opacity-60"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <div className="flex items-start justify-between">
+                                                            <div className="flex flex-1 items-start gap-4">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={
+                                                                        task.status ===
+                                                                        "done"
+                                                                    }
+                                                                    onChange={() =>
+                                                                        dispatch(
+                                                                            toggleStatus(
+                                                                                task.id
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    className="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                                />
+                                                                <div className="flex-1">
+                                                                    <h3
+                                                                        className={`mb-2 text-lg font-semibold ${
+                                                                            task.status ===
+                                                                            "done"
+                                                                                ? "text-gray-500 line-through"
+                                                                                : "text-gray-900"
+                                                                        }`}
+                                                                    >
+                                                                        {
+                                                                            task.title
+                                                                        }
+                                                                    </h3>
+                                                                    <p
+                                                                        className={`mb-3 ${
+                                                                            task.status ===
+                                                                            "done"
+                                                                                ? "text-gray-400 line-through"
+                                                                                : "text-gray-600"
+                                                                        }`}
+                                                                    >
+                                                                        {
+                                                                            task.description
+                                                                        }
+                                                                    </p>
+                                                                    <div className="flex items-center gap-4 text-sm">
+                                                                        <span
+                                                                            className={`rounded-full px-2 py-1 font-medium text-white ${
+                                                                                task.priority ===
+                                                                                "high"
+                                                                                    ? "bg-red-600"
+                                                                                    : task.priority ===
+                                                                                        "medium"
+                                                                                      ? "bg-yellow-500"
+                                                                                      : "bg-green-600"
+                                                                            }`}
+                                                                        >
+                                                                            {task.priority
+                                                                                .charAt(
+                                                                                    0
+                                                                                )
+                                                                                .toUpperCase() +
+                                                                                task.priority.slice(
+                                                                                    1
+                                                                                )}{" "}
+                                                                            Priority
+                                                                        </span>
+                                                                        <span className="text-gray-500">
+                                                                            Due:{" "}
+                                                                            {
+                                                                                task.dueDate
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <button className="text-gray-400 transition-colors duration-200 hover:text-blue-600">
+                                                                    {/* Edit logic */}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() =>
+                                                                        dispatch(
+                                                                            deleteTask(
+                                                                                task.id
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    className="text-gray-400 transition-colors duration-200 hover:text-red-600"
+                                                                >
+                                                                    🗑
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="lg:col-span-1">
+                                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                                        <h3 className="mb-6 text-lg font-semibold text-gray-900">
+                                            Task Overview
+                                        </h3>
+
+                                        <div className="mb-6 space-y-4">
+                                            <div className="rounded-lg bg-blue-50 p-4">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-blue-600">
+                                                            Total Tasks
+                                                        </p>
+                                                        <p className="text-2xl font-bold text-blue-900">
+                                                            24
+                                                        </p>
+                                                    </div>
+                                                    <div className="rounded-full bg-blue-100 p-3"></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="rounded-lg bg-green-50 p-4">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-green-600">
+                                                            Completed
+                                                        </p>
+                                                        <p className="text-2xl font-bold text-green-900">
+                                                            18
+                                                        </p>
+                                                    </div>
+                                                    <div className="rounded-full bg-green-100 p-3"></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="rounded-lg bg-red-50 p-4">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-red-600">
+                                                            Overdue
+                                                        </p>
+                                                        <p className="text-2xl font-bold text-red-900">
+                                                            3
+                                                        </p>
+                                                    </div>
+                                                    <div className="rounded-full bg-red-100 p-3"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-6">
+                                            <div className="mb-2 flex items-center justify-between">
+                                                <span className="text-sm font-medium text-gray-700">
+                                                    Progress
+                                                </span>
+                                                <span className="text-sm text-gray-500">
+                                                    75%
+                                                </span>
+                                            </div>
+                                            <div className="h-2 w-full rounded-full bg-gray-200">
+                                                <div className="h-2 rounded-full bg-blue-600"></div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <h4 className="mb-3 text-sm font-semibold text-gray-900">
+                                                Recent Activity
+                                            </h4>
+                                            <div className="space-y-3">
+                                                <div className="flex items-start gap-3">
+                                                    <div className="rounded-full bg-green-100 p-1"></div>
+                                                    <div className="flex-1">
+                                                        <p className="text-sm text-gray-900">
+                                                            Task completed
+                                                        </p>
+                                                        <p className="text-xs text-gray-500">
+                                                            2 hours ago
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-start gap-3">
+                                                    <div className="rounded-full bg-blue-100 p-1"></div>
+                                                    <div className="flex-1">
+                                                        <p className="text-sm text-gray-900">
+                                                            New task added
+                                                        </p>
+                                                        <p className="text-xs text-gray-500">
+                                                            4 hours ago
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-start gap-3">
+                                                    <div className="rounded-full bg-yellow-100 p-1"></div>
+                                                    <div className="flex-1">
+                                                        <p className="text-sm text-gray-900">
+                                                            Deadline reminder
+                                                        </p>
+                                                        <p className="text-xs text-gray-500">
+                                                            6 hours ago
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            {showModal && (
+                <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                        <div className="mb-4 flex items-center justify-between">
+                            <h3 className="text-lg font-semibold text-gray-900">
+                                Add New Task
+                            </h3>
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="text-gray-400 hover:text-gray-600"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                console.log(
+                                    "Dispatching createTask with:",
+                                    formData
+                                );
+                                dispatch(createTask(formData));
+                                setShowModal(false);
+                                setFormData({
+                                    title: "",
+                                    description: "",
+                                    priority: "low",
+                                    dueDate: "",
+                                });
+                            }}
+                        >
+                            <div className="space-y-4">
+                                <div>
+                                    <label
+                                        htmlFor="taskTitle"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
+                                        Task Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="taskTitle"
+                                        name="title"
+                                        value={formData.title}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                title: e.target.value,
+                                            })
+                                        }
+                                        required
+                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="taskDescription"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
+                                        Description
+                                    </label>
+                                    <textarea
+                                        id="taskDescription"
+                                        name="description"
+                                        value={formData.description}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                description: e.target.value,
+                                            })
+                                        }
+                                        rows="3"
+                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                    ></textarea>
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="taskPriority"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
+                                        Priority
+                                    </label>
+                                    <select
+                                        id="taskPriority"
+                                        name="priority"
+                                        value={formData.priority}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                priority: e.target.value,
+                                            })
+                                        }
+                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="low">
+                                            Low Priority
+                                        </option>
+                                        <option value="medium">
+                                            Medium Priority
+                                        </option>
+                                        <option value="high">
+                                            High Priority
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="taskDueDate"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
+                                        Due Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        id="taskDueDate"
+                                        name="dueDate"
+                                        value={formData.dueDate}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                dueDate: e.target.value,
+                                            })
+                                        }
+                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mt-6 flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                    className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className={`rounded-lg px-4 py-2 transition-colors duration-200 ${
+                                        loading
+                                            ? "cursor-not-allowed bg-blue-300 text-white"
+                                            : "bg-blue-600 text-white hover:bg-blue-700"
+                                    }`}
+                                >
+                                    {loading ? "Adding..." : "Add Task"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default UserTask;

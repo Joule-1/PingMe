@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import UserNavbar from "./UserNavbar";
 import { Menu } from "lucide-react";
+import UserTask from "./UserTask";
 
 const UserDashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -157,98 +158,7 @@ const UserDashboard = () => {
                             </div>
 
                             <div className="rounded-lg border border-gray-200 bg-white p-6">
-                                <h3 className="mb-6 text-lg font-semibold text-gray-900">
-                                    Recent Activity
-                                </h3>
-                                <div className="space-y-4">
-                                    <div className="flex items-start space-x-3">
-                                        <img
-                                            className="h-8 w-8 rounded-full"
-                                            src="https://avatar.iran.liara.run/public/12"
-                                            alt="User"
-                                        />
-                                        <div className="min-w-0 flex-1">
-                                            <p className="text-sm text-gray-900">
-                                                <span className="font-medium">
-                                                    Sarah Wilson
-                                                </span>{" "}
-                                                completed task
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                "Design homepage mockup"
-                                            </p>
-                                            <p className="mt-1 text-xs text-gray-400">
-                                                2 hours ago
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-start space-x-3">
-                                        <img
-                                            className="h-8 w-8 rounded-full"
-                                            src="https://avatar.iran.liara.run/public/23"
-                                            alt="User"
-                                        />
-                                        <div className="min-w-0 flex-1">
-                                            <p className="text-sm text-gray-900">
-                                                <span className="font-medium">
-                                                    Mike Johnson
-                                                </span>{" "}
-                                                added new task
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                "Review API documentation"
-                                            </p>
-                                            <p className="mt-1 text-xs text-gray-400">
-                                                4 hours ago
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-start space-x-3">
-                                        <img
-                                            className="h-8 w-8 rounded-full"
-                                            src="https://avatar.iran.liara.run/public/34"
-                                            alt="User"
-                                        />
-                                        <div className="min-w-0 flex-1">
-                                            <p className="text-sm text-gray-900">
-                                                <span className="font-medium">
-                                                    Emma Davis
-                                                </span>{" "}
-                                                updated priority
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                "Fix login bug" to High
-                                            </p>
-                                            <p className="mt-1 text-xs text-gray-400">
-                                                6 hours ago
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-start space-x-3">
-                                        <img
-                                            className="h-8 w-8 rounded-full"
-                                            src="https://avatar.iran.liara.run/public/56"
-                                            alt="User"
-                                        />
-                                        <div className="min-w-0 flex-1">
-                                            <p className="text-sm text-gray-900">
-                                                <span className="font-medium">
-                                                    Alex Chen
-                                                </span>{" "}
-                                                commented on
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                "Database optimization"
-                                            </p>
-                                            <p className="mt-1 text-xs text-gray-400">
-                                                8 hours ago
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                Chat Application
                             </div>
                         </div>
 
@@ -405,9 +315,6 @@ const UserDashboard = () => {
                         </div>
 
                         <button className="fixed right-6 bottom-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl">
-                            {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-    </svg> */}
                         </button>
                     </section>
                 </div>
