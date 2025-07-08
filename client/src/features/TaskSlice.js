@@ -22,6 +22,7 @@ export const fetchTasks = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const response = await api.get("/tasks");
+            console.log(response.data.data)
             return response.data; // same structure
         } catch (error) {
             return thunkAPI.rejectWithValue(

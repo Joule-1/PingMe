@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UserNavbar from "./UserNavbar";
-import { Menu } from "lucide-react";
+import { Check, Clock, Menu, NotepadText, Trash, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     fetchTasks,
@@ -16,14 +16,13 @@ const UserTask = () => {
     // Ensure tasks is an array
     const tasks = Array.isArray(taskState.tasks) ? taskState.tasks : [];
 
-    // Only filter by priority (status filter removed since no UI control)
+    // Filter by priority OR by “completed” status
     const [priorityFilter, setPriorityFilter] = useState("all");
     const filteredTasks = tasks.filter((task) => {
-        if (!task) return false;  // skip undefined tasks
-        return (
-            priorityFilter === "all" ||
-            task.priority?.toLowerCase() === priorityFilter
-        );
+        if (!task) return false;
+        if (priorityFilter === "all") return true;
+        if (priorityFilter === "completed") return task.status === "done";
+        return task.priority?.toLowerCase() === priorityFilter;
     });
 
     const loading = taskState.loading;
@@ -43,18 +42,19 @@ const UserTask = () => {
     });
 
     const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(task => task?.status === "done").length;
+    const completedTasks = tasks.filter(
+        (task) => task?.status === "done"
+    ).length;
     const overdueTasks = tasks.filter((task) => {
         if (!task || !task.dueDate) return false;
         const today = new Date().toISOString().split("T")[0];
         return task.dueDate < today && task.status === "pending";
     }).length;
-    const progress = totalTasks > 0
-        ? Math.round((completedTasks / totalTasks) * 100)
-        : 0;
+    const progress =
+        totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
     const recentActivity = [...tasks]
-        .filter(task => task && task.updatedAt)
+        .filter((task) => task && task.updatedAt)
         .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
         .slice(0, 3)
         .map((task) => {
@@ -62,8 +62,8 @@ const UserTask = () => {
                 task.createdAt === task.updatedAt
                     ? "created"
                     : task.status === "done"
-                        ? "completed"
-                        : "updated";
+                      ? "completed"
+                      : "updated";
             return {
                 id: task._id,
                 title: task.title,
@@ -77,7 +77,7 @@ const UserTask = () => {
     const handlePriorityChange = (e) => {
         const value = e.target.value.trim().toLowerCase();
         if (["low", "medium", "high"].includes(value)) {
-            setFormData(prev => ({ ...prev, priority: value }));
+            setFormData((prev) => ({ ...prev, priority: value }));
         }
     };
 
@@ -100,13 +100,13 @@ const UserTask = () => {
 
                 {/* Scrollable Content */}
                 <div className="w-full flex-1 overflow-y-auto p-6">
-                    <section id="tasks" className="px-4 py-12 sm:px-6 lg:px-8">
-                        <div className="mx-auto max-w-7xl">
-                            <div className="mb-12 text-center">
-                                <h2 className="mb-4 text-3xl font-bold text-gray-900">
+                    <section id="tasks" className="px-4 py-5 sm:px-6 lg:px-8">
+                        <div className="max-w-7xl">
+                            <div className="mb-5">
+                                <h2 className="text-3xl font-bold text-gray-900">
                                     Tasks
                                 </h2>
-                                <p className="mx-auto max-w-2xl text-lg text-gray-600">
+                                <p className="mt-2 max-w-2xl text-gray-600">
                                     Manage your tasks efficiently with priority
                                     levels, deadlines, and real-time
                                     collaboration features.
@@ -118,25 +118,37 @@ const UserTask = () => {
                                     <div className="mb-6">
                                         <button
                                             onClick={() => setShowModal(true)}
-                                            className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700"
+                                            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors duration-200 hover:bg-blue-700"
                                         >
                                             Add New Task
                                         </button>
                                     </div>
 
-                                    {/* Priority Filter Buttons */}
+                                    {/* Priority & Completed Filter Buttons */}
                                     <div className="mb-6 flex flex-wrap gap-2">
-                                        {["all", "high", "medium", "low"].map(level => (
+                                        {[
+                                            "all",
+                                            "low",
+                                            "medium",
+                                            "high",
+                                            "completed",
+                                        ].map((level) => (
                                             <button
                                                 key={level}
                                                 className={`filter-btn rounded-lg px-4 py-2 ${
-                                                    priorityFilter === level ? "bg-gray-300" : "bg-gray-200"
+                                                    priorityFilter === level
+                                                        ? "bg-gray-300"
+                                                        : "bg-gray-200"
                                                 }`}
-                                                onClick={() => setPriorityFilter(level)}
+                                                onClick={() =>
+                                                    setPriorityFilter(level)
+                                                }
                                             >
                                                 {level === "all"
                                                     ? "All Tasks"
-                                                    : level.charAt(0).toUpperCase() + level.slice(1) + " Priority"}
+                                                    : level === "completed"
+                                                      ? "Completed"
+                                                      : `${level.charAt(0).toUpperCase() + level.slice(1)} Priority`}
                                             </button>
                                         ))}
                                     </div>
@@ -157,75 +169,119 @@ const UserTask = () => {
                                                 No tasks available.
                                             </p>
                                         )}
-                                        {!loading && filteredTasks.map(task => (
-                                            <div
-                                                key={task._id}
-                                                className={`task-item rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md ${
-                                                    task.status === "done" ? "opacity-60" : ""
-                                                }`}
-                                            >
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex flex-1 items-start gap-4">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={task.status === "done"}
-                                                            onChange={() => dispatch(toggleTask(task._id))}
-                                                            className="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                        />
-                                                        <div className="flex-1">
-                                                            <h3
-                                                                className={`mb-2 text-lg font-semibold ${
-                                                                    task.status === "done"
-                                                                        ? "text-gray-500 line-through"
-                                                                        : "text-gray-900"
-                                                                }`}
-                                                            >
-                                                                {task.title}
-                                                            </h3>
-                                                            <p
-                                                                className={`mb-3 ${
-                                                                    task.status === "done"
-                                                                        ? "text-gray-400 line-through"
-                                                                        : "text-gray-600"
-                                                                }`}
-                                                            >
-                                                                {task.description}
-                                                            </p>
-                                                            <div className="flex items-center gap-4 text-sm">
-                                                                <span
-                                                                    className={`rounded-full px-2 py-1 font-medium text-white ${
-                                                                        task.priority?.trim().toLowerCase() === "high"
-                                                                            ? "bg-red-600"
-                                                                            : task.priority?.trim().toLowerCase() === "medium"
-                                                                            ? "bg-yellow-500"
-                                                                            : "bg-green-600"
+                                        {!loading &&
+                                            filteredTasks.map((task) => (
+                                                <div
+                                                    key={task._id}
+                                                    className={`task-item rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md ${
+                                                        task.status === "done"
+                                                            ? "opacity-70"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    <div className="flex items-start justify-between">
+                                                        <div className="flex flex-1 items-start gap-4">
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={
+                                                                    task.status ===
+                                                                    "done"
+                                                                }
+                                                                onChange={() =>
+                                                                    dispatch(
+                                                                        toggleTask(
+                                                                            task._id
+                                                                        )
+                                                                    )
+                                                                }
+                                                                className="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                            />
+                                                            <div className="flex-1">
+                                                                <h3
+                                                                    className={`mb-2 text-lg font-semibold ${
+                                                                        task.status ===
+                                                                        "done"
+                                                                            ? "text-gray-500 line-through"
+                                                                            : "text-gray-900"
                                                                     }`}
                                                                 >
-                                                                    {task.priority
-                                                                        ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1)
-                                                                        : "Unknown"}{" "}
-                                                                    Priority
-                                                                </span>
-                                                                <span className="text-gray-500">
-                                                                    Due: {task.dueDate || "N/A"}
-                                                                </span>
+                                                                    {task.title}
+                                                                </h3>
+                                                                <p
+                                                                    className={`mb-3 ${
+                                                                        task.status ===
+                                                                        "done"
+                                                                            ? "text-gray-400 line-through"
+                                                                            : "text-gray-600"
+                                                                    }`}
+                                                                >
+                                                                    {
+                                                                        task.description
+                                                                    }
+                                                                </p>
+                                                                <div className="flex items-center gap-4 text-sm">
+                                                                    <span
+                                                                        className={`rounded-full px-3 py-1 font-medium ${
+                                                                            task.priority
+                                                                                ?.trim()
+                                                                                .toLowerCase() ===
+                                                                            "high"
+                                                                                ? "bg-red-100 text-red-500"
+                                                                                : task.priority
+                                                                                        ?.trim()
+                                                                                        .toLowerCase() ===
+                                                                                    "medium"
+                                                                                  ? "bg-yellow-100 text-yellow-500"
+                                                                                  : "bg-green-100 text-green-500"
+                                                                        }`}
+                                                                    >
+                                                                        {task.priority
+                                                                            ? task.priority
+                                                                                  .charAt(
+                                                                                      0
+                                                                                  )
+                                                                                  .toUpperCase() +
+                                                                              task.priority.slice(
+                                                                                  1
+                                                                              )
+                                                                            : "Unknown"}{" "}
+                                                                        Priority
+                                                                    </span>
+                                                                    <span className="text-gray-500">
+                                                                        Due:{" "}
+                                                                        {task.dueDate ||
+                                                                            "N/A"}
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <button className="text-gray-400 transition-colors duration-200 hover:text-blue-600">
-                                                            {/* Edit logic */}
-                                                        </button>
-                                                        <button
-                                                            onClick={() => dispatch(removeTask(task._id))}
-                                                            className="text-gray-400 transition-colors duration-200 hover:text-red-600"
-                                                        >
-                                                            🗑
-                                                        </button>
+                                                        <div className="flex items-center gap-2">
+                                                            <button className="text-gray-400 transition-colors duration-200 hover:text-blue-600">
+                                                                {/* Edit logic */}
+                                                            </button>
+                                                            <button
+                                                                onClick={() =>
+                                                                    dispatch(
+                                                                        removeTask(
+                                                                            task._id
+                                                                        )
+                                                                    )
+                                                                }
+                                                                className="text-gray-400 transition-colors duration-200 hover:text-red-600"
+                                                            >
+                                                                <div className="rounded-full bg-gray-100 p-2">
+                                                                    <Trash
+                                                                        size={
+                                                                            15
+                                                                        }
+                                                                        className="cursor-pointer text-gray-500 hover:text-gray-800"
+                                                                    />
+                                                                </div>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
                                     </div>
                                 </div>
 
@@ -247,7 +303,9 @@ const UserTask = () => {
                                                             {totalTasks}
                                                         </p>
                                                     </div>
-                                                    <div className="rounded-full bg-blue-100 p-3"></div>
+                                                    <div className="rounded-full bg-blue-100 p-2">
+                                                        <NotepadText className="text-blue-500" />
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -261,7 +319,9 @@ const UserTask = () => {
                                                             {completedTasks}
                                                         </p>
                                                     </div>
-                                                    <div className="rounded-full bg-green-100 p-3"></div>
+                                                    <div className="rounded-full bg-green-100 p-2">
+                                                        <Check className="text-green-500" />
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -275,7 +335,9 @@ const UserTask = () => {
                                                             {overdueTasks}
                                                         </p>
                                                     </div>
-                                                    <div className="rounded-full bg-red-100 p-3"></div>
+                                                    <div className="rounded-full bg-red-100 p-2">
+                                                        <Clock className="text-red-500" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -292,7 +354,9 @@ const UserTask = () => {
                                             <div className="h-2 w-full rounded-full bg-gray-200">
                                                 <div
                                                     className="h-2 rounded-full bg-blue-600"
-                                                    style={{ width: `${progress}%` }}
+                                                    style={{
+                                                        width: `${progress}%`,
+                                                    }}
                                                 ></div>
                                             </div>
                                         </div>
@@ -307,33 +371,52 @@ const UserTask = () => {
                                                         No recent activity
                                                     </p>
                                                 ) : (
-                                                    recentActivity.map((activity) => (
-                                                        <div
-                                                            key={activity.id}
-                                                            className="flex items-start gap-3"
-                                                        >
+                                                    recentActivity.map(
+                                                        (activity) => (
                                                             <div
-                                                                className={`rounded-full p-1 ${
-                                                                    activity.type === "created"
-                                                                        ? "bg-blue-100"
-                                                                        : activity.type === "completed"
-                                                                        ? "bg-green-100"
-                                                                        : "bg-yellow-100"
-                                                                }`}
-                                                            ></div>
-                                                            <div className="flex-1">
-                                                                <p className="text-sm text-gray-900">
-                                                                    {activity.type === "created" && "Task created"}{" "}
-                                                                    {activity.type === "completed" && "Marked completed"}{" "}
-                                                                    {activity.type === "updated" && "Task updated"}:{" "}
-                                                                    <span className="font-medium">{activity.title}</span>
-                                                                </p>
-                                                                <p className="text-xs text-gray-500">
-                                                                    {activity.time}
-                                                                </p>
+                                                                key={
+                                                                    activity.id
+                                                                }
+                                                                className="flex items-center gap-3"
+                                                            >
+                                                                <div
+                                                                    className={`rounded-full p-1 ${
+                                                                        activity.type ===
+                                                                        "created"
+                                                                            ? "bg-blue-500"
+                                                                            : activity.type ===
+                                                                                "completed"
+                                                                              ? "bg-green-500"
+                                                                              : "bg-yellow-500"
+                                                                    }`}
+                                                                ></div>
+                                                                <div className="flex-1">
+                                                                    <p className="text-sm text-gray-900">
+                                                                        {activity.type ===
+                                                                            "created" &&
+                                                                            "Task created"}{" "}
+                                                                        {activity.type ===
+                                                                            "completed" &&
+                                                                            "Marked completed"}{" "}
+                                                                        {activity.type ===
+                                                                            "updated" &&
+                                                                            "Task updated"}
+                                                                        :{" "}
+                                                                        <span className="font-medium">
+                                                                            {
+                                                                                activity.title
+                                                                            }
+                                                                        </span>
+                                                                    </p>
+                                                                    <p className="text-xs text-gray-500">
+                                                                        {
+                                                                            activity.time
+                                                                        }
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    ))
+                                                        )
+                                                    )
                                                 )}
                                             </div>
                                         </div>
@@ -357,17 +440,29 @@ const UserTask = () => {
                                 onClick={() => setShowModal(false)}
                                 className="text-gray-400 hover:text-gray-600"
                             >
-                                ✕
+                                <X />
                             </button>
                         </div>
 
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                const { title, description, priority, dueDate } = formData;
-                                const today = new Date().toISOString().split("T")[0];
+                                const {
+                                    title,
+                                    description,
+                                    priority,
+                                    dueDate,
+                                } = formData;
+                                const today = new Date()
+                                    .toISOString()
+                                    .split("T")[0];
 
-                                if (!title.trim() || !description.trim() || !priority || !dueDate) {
+                                if (
+                                    !title.trim() ||
+                                    !description.trim() ||
+                                    !priority ||
+                                    !dueDate
+                                ) {
                                     alert("Please fill in all fields.");
                                     return;
                                 }
@@ -377,13 +472,21 @@ const UserTask = () => {
                                 }
                                 dispatch(createTask(formData));
                                 setShowModal(false);
-                                setFormData({ title: "", description: "", priority: "low", dueDate: "" });
+                                setFormData({
+                                    title: "",
+                                    description: "",
+                                    priority: "low",
+                                    dueDate: "",
+                                });
                             }}
                         >
                             <div className="space-y-4">
                                 {/* Form fields (Title, Description, etc.) */}
                                 <div>
-                                    <label htmlFor="taskTitle" className="mb-1 block text-sm font-medium text-gray-700">
+                                    <label
+                                        htmlFor="taskTitle"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
                                         Task Title
                                     </label>
                                     <input
@@ -392,7 +495,10 @@ const UserTask = () => {
                                         name="title"
                                         value={formData.title}
                                         onChange={(e) =>
-                                            setFormData(prev => ({ ...prev, title: e.target.value }))
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                title: e.target.value,
+                                            }))
                                         }
                                         required
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
@@ -400,7 +506,10 @@ const UserTask = () => {
                                 </div>
 
                                 <div>
-                                    <label htmlFor="taskDescription" className="mb-1 block text-sm font-medium text-gray-700">
+                                    <label
+                                        htmlFor="taskDescription"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
                                         Description
                                     </label>
                                     <textarea
@@ -408,7 +517,10 @@ const UserTask = () => {
                                         name="description"
                                         value={formData.description}
                                         onChange={(e) =>
-                                            setFormData(prev => ({ ...prev, description: e.target.value }))
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                description: e.target.value,
+                                            }))
                                         }
                                         rows="3"
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
@@ -416,7 +528,10 @@ const UserTask = () => {
                                 </div>
 
                                 <div>
-                                    <label htmlFor="taskPriority" className="mb-1 block text-sm font-medium text-gray-700">
+                                    <label
+                                        htmlFor="taskPriority"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
                                         Priority
                                     </label>
                                     <select
@@ -426,14 +541,23 @@ const UserTask = () => {
                                         onChange={handlePriorityChange}
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                                     >
-                                        <option value="low">Low Priority</option>
-                                        <option value="medium">Medium Priority</option>
-                                        <option value="high">High Priority</option>
+                                        <option value="low">
+                                            Low Priority
+                                        </option>
+                                        <option value="medium">
+                                            Medium Priority
+                                        </option>
+                                        <option value="high">
+                                            High Priority
+                                        </option>
                                     </select>
                                 </div>
 
                                 <div>
-                                    <label htmlFor="taskDueDate" className="mb-1 block text-sm font-medium text-gray-700">
+                                    <label
+                                        htmlFor="taskDueDate"
+                                        className="mb-1 block text-sm font-medium text-gray-700"
+                                    >
                                         Due Date
                                     </label>
                                     <input
@@ -442,7 +566,10 @@ const UserTask = () => {
                                         name="dueDate"
                                         value={formData.dueDate}
                                         onChange={(e) =>
-                                            setFormData(prev => ({ ...prev, dueDate: e.target.value }))
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                dueDate: e.target.value,
+                                            }))
                                         }
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                                     />

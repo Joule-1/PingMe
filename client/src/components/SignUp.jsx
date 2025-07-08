@@ -566,7 +566,7 @@ function SignUp() {
                             <p className="text-sm text-gray-600">
                                 Already Registered?
                                 <a
-                                    href="/login"
+                                    href="/signin"
                                     className="font-medium text-blue-600 transition-colors duration-200 hover:text-blue-700"
                                 >
                                     {" "}

@@ -9,11 +9,12 @@ import {
     X,
     BringToFront,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Logo } from "../../assets";
 import api from "../../utils/UserAxios";
 
 const UserNavbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+    const location = useLocation();
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState();
 
@@ -61,14 +62,14 @@ const UserNavbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                     <div className="flex flex-col gap-4 text-gray-700">
                         <Link
                             to="/dashboard"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600 ${location.pathname === "/dashboard" ? "text-blue-500 bg-blue-100" : "text-gray-500 bg-white"}`}
                         >
                             <LayoutDashboard className="h-5 w-5" />
                             Dashboard
                         </Link>
                         <Link
                             to="/tasks"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600"
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-blue-50 hover:text-blue-600 ${location.pathname === "/tasks" ? "text-blue-500 bg-blue-100" : "text-gray-500 bg-white"}`}
                         >
                             <BringToFront className="h-5 w-5"/>
                             Task

@@ -47,9 +47,9 @@
         const isToday = day.isSame(today, "day");
         const has = taskMap[key];
         return (
-        <div key={num} className={`relative flex items-center justify-center w-full aspect-square rounded ${isToday?"bg-blue-800 text-white":""}`} title={has?has.map(t=>t.title).join(", "):""}>
+        <div key={num} className={`relative flex items-center justify-center w-full py-3 rounded-full ${isToday?"bg-blue-800 text-white":""}`} title={has?has.map(t=>t.title).join(", "):""}>
             {num}
-            {has && <span className="absolute bottom-1 w-2 h-2 rounded-full bg-blue-500" />}
+            {has && <span className="absolute bottom-1 w-2 h-2 rounded-full bg-orange-500" />}
         </div>
         );
     });
@@ -67,9 +67,9 @@
                 {currentDate.format("MMMM")}
                 </button>
                 {openMonth && (
-                <div className="absolute bg-white shadow rounded">
+                <div className="absolute z-50 bg-white shadow rounded h-[100px] overflow-y-auto overflow-x-hidden">
                     {months.map((m,i)=>(
-                    <div key={i} onClick={()=>{setOpenMonth(false); setCurrentDate(currentDate.set("month",i));}} className="p-1 hover:bg-gray-100">
+                    <div key={i} onClick={()=>{setOpenMonth(false); setCurrentDate(currentDate.set("month",i));}} className="p-1 px-2 hover:bg-gray-100">
                         {m}
                     </div>
                     ))}
