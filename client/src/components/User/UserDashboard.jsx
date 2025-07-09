@@ -27,7 +27,6 @@ const UserDashboard = () => {
             try {
                 const res = await api.get("/dashboard");
                 setStats(res.data.data);
-                console.log(res.data.data)
             } catch (err) {
                 console.error("Failed to load dashboard stats:", err);
             }
