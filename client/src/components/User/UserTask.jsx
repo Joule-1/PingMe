@@ -13,10 +13,9 @@ import { formatDistanceToNow } from "date-fns";
 const UserTask = () => {
     const dispatch = useDispatch();
     const taskState = useSelector((state) => state.tasks);
-    // Ensure tasks is an array
+
     const tasks = Array.isArray(taskState.tasks) ? taskState.tasks : [];
 
-    // Filter by priority OR by “completed” status
     const [priorityFilter, setPriorityFilter] = useState("all");
     const filteredTasks = tasks.filter((task) => {
         if (!task) return false;
@@ -42,21 +41,23 @@ const UserTask = () => {
     });
 
     const totalTasks = tasks.length;
+
     const completedTasks = tasks.filter(
         (task) => task?.status === "done"
     ).length;
+
     const overdueTasks = tasks.filter((task) => {
         if (!task || !task.dueDate) return false;
         const today = new Date().toISOString().split("T")[0];
         return task.dueDate < today && task.status === "pending";
     }).length;
-    const progress =
-        totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+    const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
     const recentActivity = [...tasks]
         .filter((task) => task && task.updatedAt)
         .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-        .slice(0, 3)
+        .slice(0, 5)
         .map((task) => {
             const type =
                 task.createdAt === task.updatedAt
@@ -98,7 +99,7 @@ const UserTask = () => {
                     </button>
                 </div>
 
-                {/* Scrollable Content */}
+                {/* Main Content */}
                 <div className="w-full flex-1 overflow-y-auto p-6">
                     <section id="tasks" className="px-4 py-5 sm:px-6 lg:px-8">
                         <div className="max-w-7xl">
@@ -249,7 +250,7 @@ const UserTask = () => {
                                                                     </span>
                                                                     <span className="text-gray-500">
                                                                         Due:{" "}
-                                                                        {task.dueDate ||
+                                                                        {task.dueDate.split("T")[0] ||
                                                                             "N/A"}
                                                                     </span>
                                                                 </div>
@@ -257,7 +258,6 @@ const UserTask = () => {
                                                         </div>
                                                         <div className="flex items-center gap-2">
                                                             <button className="text-gray-400 transition-colors duration-200 hover:text-blue-600">
-                                                                {/* Edit logic */}
                                                             </button>
                                                             <button
                                                                 onClick={() =>

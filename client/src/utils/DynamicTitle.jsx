@@ -12,6 +12,8 @@ const DynamicTitle = () => {
             "/signup": "SignUp",
             "/privacy": "Privacy Policy",
             "/tos": "Terms Of Service",
+            "/dashboard": "Dashboard",
+            "/tasks": "Tasks",
         };
 
         document.title =

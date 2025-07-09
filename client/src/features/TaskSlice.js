@@ -1,14 +1,12 @@
-// src/redux/taskSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/UserTaskAxios.js";
 
-// Async thunks
 export const createTask = createAsyncThunk(
     "tasks/createTask",
     async (taskData, thunkAPI) => {
         try {
             const response = await api.post("/tasks", taskData);
-            return response.data; // whole response with { data, statusCode, message, success }
+            return response.data;  
         } catch (error) {
             return thunkAPI.rejectWithValue(
                 error.response?.data || "Error while creating task"
@@ -22,8 +20,7 @@ export const fetchTasks = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const response = await api.get("/tasks");
-            console.log(response.data.data)
-            return response.data; // same structure
+            return response.data;  
         } catch (error) {
             return thunkAPI.rejectWithValue(
                 error.response?.data || "Error while fetching tasks"
@@ -37,7 +34,7 @@ export const toggleTask = createAsyncThunk(
     async (taskId, thunkAPI) => {
         try {
             const response = await api.patch(`/tasks/${taskId}/toggle`);
-            return response.data.data; // returns updated task
+            return response.data.data;  
         } catch (error) {
             return thunkAPI.rejectWithValue(
                 error.response?.data || "Error toggling task"
@@ -51,7 +48,7 @@ export const removeTask = createAsyncThunk(
     async (taskId, thunkAPI) => {
         try {
             await api.delete(`/tasks/${taskId}`);
-            return taskId; // just return the ID for Redux to remove
+            return taskId; 
         } catch (error) {
             return thunkAPI.rejectWithValue(
                 error.response?.data || "Error deleting task"
@@ -60,7 +57,6 @@ export const removeTask = createAsyncThunk(
     }
 );
 
-// Slice
 const taskSlice = createSlice({
     name: "tasks",
     initialState: {

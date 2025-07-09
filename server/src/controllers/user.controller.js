@@ -18,14 +18,6 @@ const generateAccessTokenAndRefreshToken = async function (userId) {
 };
 
 const registerUser = asyncHandler(async function (req, res) {
-    //  get user details from frontend
-    //  validation - not empty
-    //  check if user already exists
-    //  create user object
-    //  remove password and refresh token field from response
-    //  check if user created
-    //  return response
-
     const { name, email, password, avatar } = req.body;
 
     if ([name, email, password, avatar].some((field) => field?.trim() === "")) {
@@ -44,10 +36,14 @@ const registerUser = asyncHandler(async function (req, res) {
     });
 
     try {
-        await user.validate(); // errors are caught in a controlled try-catch block
+        await user.validate();
         await user.save();
     } catch (error) {
-        const firstError = error.errors.avatar || error.errors.email || error.errors.password || error.errors.name;
+        const firstError =
+            error.errors.avatar ||
+            error.errors.email ||
+            error.errors.password ||
+            error.errors.name;
 
         throw new ApiError(400, firstError.properties.message);
     }
@@ -56,7 +52,7 @@ const registerUser = asyncHandler(async function (req, res) {
         await generateAccessTokenAndRefreshToken(user._id);
 
     const createdUser = await User.findById(user._id).select(
-        "-password -refreshToken" // password and refresh token is removed before sending to frontend
+        "-password -refreshToken"
     );
 
     if (!createdUser)
@@ -68,7 +64,7 @@ const registerUser = asyncHandler(async function (req, res) {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite: "None", // Required for cross-site cookies
+        sameSite: "strict",
     };
 
     return res
@@ -81,12 +77,6 @@ const registerUser = asyncHandler(async function (req, res) {
 });
 
 const loginUser = asyncHandler(async function (req, res) {
-    //  req.body -> data
-    //  find the user by email
-    //  check password
-    //  generate refresh token and generate access token
-    //  save refresh token in db
-    //  return response after removing password and refresh token with cookie
     const { email, password } = req.body;
 
     if (!email || !password)
@@ -112,7 +102,7 @@ const loginUser = asyncHandler(async function (req, res) {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite: "None",
+        sameSite: "strict",
     };
 
     return res
@@ -127,7 +117,7 @@ const loginUser = asyncHandler(async function (req, res) {
                 },
                 "User Logged In Successfully"
             )
-        );      
+        );
 });
 
 const logoutUser = asyncHandler(async function (req, res) {
@@ -146,6 +136,7 @@ const logoutUser = asyncHandler(async function (req, res) {
     const options = {
         httpOnly: true,
         secure: true,
+        sameSite: "strict",
     };
 
     return res

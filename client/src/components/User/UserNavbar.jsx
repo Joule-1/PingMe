@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
     LayoutDashboard,
-    CalendarCheck,
-    MessageCircle,
-    Settings,
     LogOut,
-    Menu,
-    X,
     BringToFront,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -37,7 +32,7 @@ const UserNavbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
     return (
         <>
-            {/* Overlay for mobile */}
+            {/* For Mobile */}
             {isSidebarOpen && (
                 <div
                     className="fixed inset-0 z-30 bg-opacity-50 md:hidden"

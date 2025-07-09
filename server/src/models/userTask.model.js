@@ -25,7 +25,7 @@ const userTaskSchema = new Schema(
       required: [true, "Priority is required"],
     },
     dueDate: {
-      type: String,
+      type: Date,
       required: [true, "Due Date is required"],
     },
     status: {
